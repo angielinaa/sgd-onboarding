@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGD Onboarding Final - AIESEC in UMM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* AIESEC BRAND PALETTE */
+        :root {
+            --aiesec-blue: #037ef3;
+            --aiesec-dark-blue: #0a2f5e;
+            --aiesec-teal: #4be8e8;
+            --aiesec-yellow: #f85a40; /* Red/Orange accent */
+            --aiesec-grey: #f3f4f7;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #e2e8f0;
+            display: grid;
+            gap: 30px;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            padding: 40px 0;
+            place-items: center;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 800; }
+        h1 { font-size: 72px; line-height: 1.1; margin-bottom: 20px; color: var(--aiesec-blue); z-index: 2; }
+        h2 { font-size: 48px; margin-bottom: 25px; color: var(--aiesec-blue); z-index: 2; position: relative; }
+        h3 { font-size: 26px; margin-bottom: 10px; color: var(--text-dark); }
+        p, li { font-size: 20px; color: #555; line-height: 1.6; }
+        
+        .handwritten {
+            font-family: 'Caveat', cursive;
+            color: var(--aiesec-yellow);
+            font-size: 32px;
+            transform: rotate(-5deg);
+            display: inline-block;
+        }
+
+        /* DECORATIVE ELEMENTS (The "Random" Graphics) */
+        .decor-blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .blob-blue { background-color: var(--aiesec-blue); }
+        .blob-teal { background-color: var(--aiesec-teal); }
+        .blob-yellow { background-color: var(--aiesec-yellow); }
+
+        .decor-dots {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-image: radial-gradient(var(--aiesec-blue) 2px, transparent 2px);
+            background-size: 20px 20px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .decor-stripe {
+            position: absolute;
+            background: var(--aiesec-teal);
+            height: 15px;
+            width: 200px;
+            transform: rotate(-45deg);
+            z-index: 0;
+        }
+
+        /* LAYOUT UTILS */
+        .content-area { padding: 40px 70px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 1; position: relative; }
+        .two-column { display: grid; grid-template-columns: 1fr 0.8fr; gap: 60px; align-items: center; height: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; }
+        
+        /* IMAGES */
+        .image-wrapper { 
+            border-radius: 20px; 
+            overflow: hidden; 
+            height: 100%; 
+            box-shadow: 15px 15px 0px rgba(3, 126, 243, 0.1); /* Graphic Shadow */
+            position: relative;
+            background: #eee;
+        }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* CARDS */
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 16px; 
+            border: 1px solid #eee;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            height: 100%; 
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--aiesec-blue); }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--aiesec-blue), var(--aiesec-teal));
+            border-radius: 16px 16px 0 0;
+        }
+
+        .icon-box {
+            width: 70px; height: 70px;
+            background: var(--aiesec-grey);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; color: var(--aiesec-blue);
+            margin-bottom: 20px;
+        }
+
+        /* TABLE STYLE */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 10px; }
+        th, td { padding: 20px; text-align: left; }
+        th { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        td { background: white; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        td:first-child { border-left: 5px solid var(--aiesec-blue); border-radius: 10px 0 0 10px; font-weight: bold; color: var(--aiesec-blue); }
+        td:last-child { border-right: 1px solid #eee; border-radius: 0 10px 10px 0; }
+
+        /* HIGHLIGHT NUMBERS */
+        .big-number { font-size: 80px; font-weight: 900; color: var(--aiesec-blue); line-height: 1; letter-spacing: -3px; }
+        .number-label { font-size: 18px; text-transform: uppercase; color: #777; letter-spacing: 1px; margin-top: 10px; font-weight: 700; }
+
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide -->
+<div class="slide-container" style="background: white;">
+    <!-- Decor -->
+    <div class="decor-blob blob-blue" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
+    <div class="decor-blob blob-teal" style="width: 300px; height: 300px; bottom: -50px; left: -50px;"></div>
+    <div class="decor-dots" style="top: 100px; left: 50px;"></div>
+
+    <div class="content-area" style="align-items: flex-start; justify-content: center; padding-left: 100px;">
+        <span class="handwritten">Hey Newies! Welcome to...</span>
+        <h1 style="font-size: 90px;">FUNCTIONAL<br>ONBOARDING:<br><span style="color: var(--aiesec-teal);">SGD</span> 🌏</h1>
+        <p style="font-size: 28px; color: #555; max-width: 600px;">Strategic Global Development<br><strong>AIESEC in UMM</strong></p>
+        
+        <div style="margin-top: 40px; display: flex; gap: 20px;">
+            <div style="padding: 10px 20px; background: var(--aiesec-blue); color: white; border-radius: 50px; font-weight: bold;">💙 Business Development</div>
+            <div style="padding: 10px 20px; background: var(--aiesec-grey); color: var(--aiesec-dark-blue); border-radius: 50px; font-weight: bold;">🚀 Induction Day</div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Welcome (Ice Breaker) -->
+<div class="slide-container">
+    <!-- Decor -->
+    <div class="decor-stripe" style="top: 50px; right: -50px; background: var(--aiesec-yellow);"></div>
+    
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h2>Welcome to the Fam! 👋</h2>
+                <p>Selamat datang di SGD! Anggap ini rumah baru kalian.</p>
+                <p>Di sini kita bakal belajar bareng, tumbuh bareng, dan bikin impact bareng. <span class="handwritten" style="font-size: 24px; color: var(--aiesec-blue);">No pressure, just progress!</span></p>
+                <br>
+                <div class="card" style="background: #f0f9ff; border: none; border-left: 5px solid var(--aiesec-blue);">
+                    <p style="font-weight: bold; color: var(--aiesec-blue); margin-bottom: 10px;">✨ Culture Check:</p>
+                    <ul style="margin-left: 20px; list-style: none;">
+                        <li>✅ <strong>Open Minded</strong> (Terbuka sama ide gila)</li>
+                        <li>✅ <strong>Supportive</strong> (Saling bantu, no julid)</li>
+                        <li>✅ <strong>Proactive</strong> (Jemput bola, jangan nunggu)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="image-wrapper">
+                <img src="logo.jpg" alt="AIESEC Logo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: What is BD? -->
+<div class="slide-container">
+    <div class="decor-dots" style="bottom: 50px; right: 50px;"></div>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="image-wrapper" style="box-shadow: -15px 15px 0px rgba(0, 193, 110, 0.2);">
+                <img src="fam.jpeg" alt="AIESEC Family">
+            </div>
+            <div>
+                <h2>The Heart of Sustainability ❤️</h2>
+                <p><strong>Business Development (BD)</strong> itu ibarat "Jantung"-nya AIESEC.</p>
+                <p>Tugas kita simple: Nyari "bahan bakar" biar organisasi tetep jalan.</p>
+                <br>
+                <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="card">
+                        <div class="icon-box"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <h3>Financial</h3>
+                        <p style="font-size: 16px;">Cuan / Fresh Money buat operasional.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon-box" style="color: var(--aiesec-teal);"><i class="fa-solid fa-gift"></i></div>
+                        <h3>In-Kind</h3>
+                        <p style="font-size: 16px;">Barang/Jasa (Venue gratis, Snack, dll).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: SGD Focus -->
+<div class="slide-container" style="background: linear-gradient(180deg, white 0%, #f0f9ff 100%);">
+    <div class="decor-blob blob-blue" style="width: 400px; height: 400px; top: -100px; left: -100px; opacity: 0.05;"></div>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h2>So, SGD = GEP Support 🌏</h2>
+                <p style="font-size: 24px;">Di slide LCVP tertulis: <strong>SGD = GEP</strong>.</p>
+                <p>Kita adalah "Support System" buat departemen ELD (Exchange Operasional). Kita handle GEP Sales (Global Exchange Product)</p>
+                <br>
+                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <p>🎯 <strong>Main Mission:</strong></p>
+                    <p>Cari partner / startupbuat support program internasional <strong>IGV (Incoming)</strong> atau <strong>OGX (Outgoing)</strong>. Biar makin banyak 'bule' yang dateng dan member kita yang berangkat!</p>
+                </div>
+            </div>
+            <div class="image-wrapper">
+                <img src="bd.JPG" alt="BD Team">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: MoS & KPI Table -->
+<div class="slide-container">
+    <div class="decor-stripe" style="top: 0; left: 50%; width: 100px; height: 10px; background: var(--aiesec-blue);"></div>
+    <div class="content-area">
+        <h2>MoS & KPI: Scoreboard Kita 📊</h2>
+        <p>Gimana caranya kita tau kalau kita berhasil? Ini skor-nya:</p>
+        
+        <table style="margin-top: 30px;">
+            <thead>
+                <tr>
+                    <th width="30%">Measurement</th>
+                    <th width="70%">Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>💸 Financial Revenue</td>
+                    <td>Jumlah duit cash (Fresh Money) yang kita dapet dari partner.</td>
+                </tr>
+                <tr>
+                    <td>😍 NPS Average</td>
+                    <td>Net Promoter Score. Survey kepuasan partner. <strong>Target > 8.0</strong> (Mereka harus happy!).</td>
+                </tr>
+                <tr>
+                    <td>📦 In-Kind Support</td>
+                    <td>Support barang/jasa (Venue gratis, Konsumsi meeting, Transport).</td>
+                </tr>
+                <tr>
+                    <td>📑 ESSM Imp.</td>
+                    <td>Administrasi rapi (Sales Flow bener & CRM update).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 6: Minimums of the Role -->
+<div class="slide-container">
+    <div class="decor-blob blob-yellow" style="right: -100px; bottom: -100px; width: 300px; height: 300px;"></div>
+    <div class="content-area">
+        <h2>Minimums of the Role (Do's) ✅</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div class="icon-box"><i class="fa-solid fa-chess-knight"></i></div>
+                <h3>Strategy GEP</h3>
+                <p>Bikin strategi jitu buat dapet support GEP lewat partnership.</p>
+            </div>
+            <div class="card">
+                <div class="icon-box" style="color: var(--aiesec-teal);"><i class="fa-solid fa-handshake-simple"></i></div>
+                <h3>Synergy w/ ELD</h3>
+                <p>Ngobrol bareng anak Exchange, biar tau "mereka butuh apa?"</p>
+            </div>
+            <div class="card">
+                <div class="icon-box" style="color: var(--aiesec-yellow);"><i class="fa-solid fa-bullseye"></i></div>
+                <h3>Goal Setting</h3>
+                <p>Set target revenue & eksekusi sales flow dari awal sampe deal.</p>
+            </div>
+            <!-- Row 2 implied or 3 items focused -->
+        </div>
+        <p style="margin-top: 30px; text-align: center; color: #888;">+ LC Cost Reduction & Executing Sales Flow!</p>
+    </div>
+</div>
+
+<!-- Slide 7: AIESEC in UMM WIGs -->
+<div class="slide-container">
+    <div class="decor-dots" style="top: 20px; right: 20px;"></div>
+    <div class="content-area">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <span class="handwritten">Big Dreams!</span>
+            <h2>AIESEC UMM: Wildly Important Goals 🚀</h2>
+            <p>Visi besar LC kita sampai <strong>31 Januari 2027</strong></p>
+        </div>
+        
+        <div class="grid-3" style="text-align: center;">
+            <div class="card" style="border: none; background: #f8faff;">
+                <div class="big-number">37</div>
+                <div class="number-label">Exchange Growth</div>
+                <p style="margin-top: 10px;">Naik dari 16 <i class="fa-solid fa-arrow-right"></i> 37 APD</p>
+            </div>
+            <div class="card" style="border: none; background: #eafff6;">
+                <div class="big-number" style="color: var(--aiesec-teal);">>3</div>
+                <div class="number-label">Cash Reserve</div>
+                <p style="margin-top: 10px;">Naik dari 1.32 <i class="fa-solid fa-arrow-right"></i> >3.0 Bulan</p>
+            </div>
+            <div class="card" style="border: none; background: #fff5f5;">
+                <div class="big-number" style="color: var(--aiesec-yellow);">4</div>
+                <div class="number-label">Collaborations</div>
+                <p style="margin-top: 10px;">Naik dari 0 <i class="fa-solid fa-arrow-right"></i> 4 Events</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Our Strategy (How to Win) -->
+<div class="slide-container">
+    <div class="content-area">
+        <h2>Gimana Cara Kita Menang Target? 🧠</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div style="font-size: 40px; margin-bottom: 15px;">🔌</div>
+                <h3>1. Exchange Enablement</h3>
+                <p>Support operasional lewat revenue & partners yang tepat sasaran.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 40px; margin-bottom: 15px;">💰</div>
+                <h3>2. Cash First</h3>
+                <p>Prioritaskan cash inflow yang <strong>predictable</strong>. Cari duit yang pasti-pasti aja.</p>
+            </div>
+            <div class="card">
+                <div style="font-size: 40px; margin-bottom: 15px;">🤝</div>
+                <h3>3. Long-term Assets</h3>
+                <p>Partner lama di-maintain biar awet. Jadi aset strategis kita.</p>
+            </div>
+        </div>
+        <div style="margin-top: 40px; background: var(--aiesec-dark-blue); padding: 20px; border-radius: 12px; text-align: center;">
+            <p style="color: white; font-weight: bold; font-size: 20px;">"Kita nggak cuma nyari duit sekali doang, tapi bangun hubungan jangka panjang juga."</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: The Money Talk -->
+<div class="slide-container">
+    <div class="decor-blob blob-teal" style="top: -100px; right: -100px; width: 400px; height: 400px;"></div>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h2>The Money Talk 💸</h2>
+                <p>Target BD satu term ini totalnya <strong>30 Juta</strong>.</p>
+                <div style="margin-top: 30px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">1</div>
+                        <p>Dibagi 3 Functional: SGD, SYD, SBD.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">2</div>
+                        <p>SGD kebagian target: <strong>10 Juta</strong>.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">3</div>
+                        <p>Waktu Efektif: <strong>8 Bulan</strong> (Maret - Nov).</p>
+                    </div>
+                </div>
+            </div>
+             <div class="card" style="text-align: center; justify-content: center; display: flex; flex-direction: column; background: var(--aiesec-blue); color: white; border: none;">
+                <p style="font-size: 18px; text-transform: uppercase; color: rgba(255,255,255,0.7);">Target Per Bulan</p>
+                <div class="big-number" style="color: white;">1.25 JT</div>
+                <p style="color: white;">Per Functional</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Why 8 Months? -->
+<div class="slide-container" style="background-color: var(--aiesec-dark-blue); color: white;">
+    <div class="decor-dots" style="opacity: 0.1; top: 50px; left: 50px;"></div>
+    <div class="content-area" style="text-align: center;">
+        <span class="handwritten" style="color: var(--aiesec-teal);">Important info!</span>
+        <h2 style="color: white; font-size: 60px; margin-top: 10px;">Wait, kenapa cuma 8 Bulan? 🤔</h2>
+        <div style="width: 100px; height: 6px; background: var(--aiesec-teal); margin: 0 auto 30px; border-radius: 10px;"></div>
+        <p style="color: rgba(255,255,255,0.9); font-size: 28px; max-width: 900px; margin: 0 auto;">
+            Soalnya bulan <strong>Desember - Januari</strong> itu perusahaan biasanya <strong>"Tutup Buku"</strong>.
+        </p>
+        <br>
+        <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; max-width: 800px; margin: 30px auto;">
+            <p style="color: rgba(255,255,255,0.8); font-size: 22px;">Mereka nggak bakal mau diajak partnership baru karena lagi ribet laporan akhir tahun. Jadi kita harus genjot maksimal di 8 bulan produktif!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: The Mindset -->
+<div class="slide-container">
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <h2>Target: 1.25 Juta / Bulan</h2>
+                <p>Angka ini dibagi ke 3 orang anggota kita.</p>
+                <br>
+                <div class="card" style="background: #fdf2f2; border: none; border-left: 5px solid var(--aiesec-yellow);">
+                    <h3>🧠 The Mindset:</h3>
+                    <p style="margin-top: 10px;">Inget ya, ini <strong>"KALO BISA"</strong>, bukan wajib mati-matian.</p>
+                    <p style="margin-top: 10px;">Ini target aspirasi biar kita semangat. Kalau nggak nyampe? Gapapa, yang penting <em>effort</em>-nya udah maksimal. <span class="handwritten" style="font-size: 24px;">Santai tapi progresif!</span></p>
+                </div>
+            </div>
+             <div class="image-wrapper">
+                 <img src="logo.jpg" alt="AIESEC Logo">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: Role Division -->
+<div class="slide-container">
+    <div class="decor-blob blob-blue" style="bottom: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; border-radius: 50% 50% 0 0;"></div>
+    <div class="content-area">
+        <h2 style="text-align: center;">Pembagian Tugas Tim SGD 🤝</h2>
+        <p style="text-align: center; margin-bottom: 40px;">Biar kerjanya fokus, kita bagi 3 role utama:</p>
+        
+        <div class="grid-3">
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🍱</div>
+                <h3>1. Konsumsi</h3>
+                <p>Cari partner F&B (Makan/Minum). Catering, Snack Box, Air Mineral.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🚌</div>
+                <h3>2. Trans & Acc</h3>
+                <p>Cari partner Travel, Bus, atau Guest House/Hotel buat Bule.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🏢</div>
+                <h3>3. Venue</h3>
+                <p>Cari tempat gratisan/diskon buat acara AIESEC (Meeting, Seminar).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 13: Strategy 1 - Company -->
+<div class="slide-container">
+    <div class="content-area">
+        <div class="two-column">
+             <div class="image-wrapper">
+                <img src="nga.jpeg" alt="NGA Team">
+            </div>
+            <div>
+                <span class="handwritten">Secret Weapon #1</span>
+                <h2>AIESEC as a Company 👔</h2>
+                <p>Gimana cara dapet partner?</p>
+                <div style="margin-top: 20px;">
+                    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                        <h4><i class="fa-solid fa-briefcase" style="color: var(--aiesec-blue);"></i> Be Professional</h4>
+                        <p style="font-size: 16px;">Posisikan diri kita sebagai partner bisnis yang setara, bukan mahasiswa magang.</p>
+                    </div>
+                    <div class="card" style="padding: 20px; border-left-color: var(--aiesec-yellow);">
+                        <h4><i class="fa-solid fa-ban" style="color: var(--aiesec-yellow);"></i> Not Charity</h4>
+                        <p style="font-size: 16px;">Kita bukan "minta sumbangan". Kita jual VALUE yang menguntungkan mereka!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14: Strategy 2 - The Bule -->
+<div class="slide-container">
+    <div class="decor-stripe" style="background: var(--aiesec-teal); width: 400px; height: 20px; bottom: 100px; right: -100px;"></div>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <span class="handwritten">Secret Weapon #2</span>
+                <h2>Highlight the "International Exposure" 🌍</h2>
+                <p>Ini senjata rahasia kita!</p>
+                <br>
+                <div class="card">
+                    <h3>International Exposure</h3>
+                    <p>Perusahaan lokal seneng banget sama hal berbau internasional.</p>
+                    <hr style="border: 0; border-top: 1px dashed #ddd; margin: 15px 0;">
+                    <p><em>"Kak, produk kakak bakal dipake sama mahasiswa asing di berbagai kegiatan internasional loh!"</em></p>
+                    <p style="margin-top: 10px; font-weight: bold; color: var(--aiesec-blue);">Ini value mahal yang organisasi lain belum tentu punya.</p>
+                </div>
+            </div>
+             <div class="image-wrapper">
+                <img src="ljco.jpeg" alt="LJCO Team">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15: Strategy 3 - USP -->
+<div class="slide-container">
+    <div class="content-area">
+        <h2>Strategy #3: The Secret Sauce (USP) 🌶️</h2>
+        <div class="two-column">
+            <div class="card">
+                <div class="icon-box"><i class="fa-solid fa-star"></i></div>
+                <h3>What is USP?</h3>
+                <p><strong>Unique Selling Proposition.</strong> Hal unik yang cuma kita punya.</p>
+                <ul style="margin-left: 20px; margin-top: 15px;">
+                    <li>🌐 Network Global di 120+ Negara.</li>
+                    <li>🎓 Akses ke ribuan mahasiswa UMM (Market Gen-Z!).</li>
+                </ul>
+            </div>
+            <div class="card" style="border-left-color: var(--aiesec-teal);">
+                <div class="icon-box" style="color: var(--aiesec-teal);"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <h3>Market Research</h3>
+                <p>Penting buat tau <strong>Profit Sharing</strong>.</p>
+                <p>Kita punya "Power" sebagai member AIESEC yang bisa jadi delegasi & promotor buat partner kita.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16: Closing & Q&A -->
+<div class="slide-container" style="background: white; justify-content: center; align-items: center; text-align: center;">
+    <div class="decor-blob blob-blue" style="width: 800px; height: 800px; opacity: 0.05;"></div>
+    <div class="content-area" style="z-index: 2; align-items: center;">
+        <div class="image-wrapper" style="height: 300px; width: 500px; margin-bottom: 30px; border-radius: 20px;">
+             <img src="lgd.jpeg" alt="LGD Team">
+        </div>
+        <h1>Ada Pertanyaan, Guys? 🤔</h1>
+        <p>Nggak usah tegang, kita belajar bareng-bareng di sini.</p>
+        <p style="font-size: 24px; font-weight: bold; color: var(--aiesec-blue); margin-top: 20px;">Let's make Strategic Global Development Great!</p>
+        
+        <div style="margin-top: 40px;">
+            <a href="#" style="background: var(--aiesec-blue); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 20px; box-shadow: 0 10px 20px rgba(3, 126, 243, 0.3);">Let's Start! 🚀</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
