@@ -22,6 +22,11 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* Biar judul slide nggak ketutup navbar pas berhenti scroll */
+}
+
         body {
             background-color: #e2e8f0;
             display: grid;
@@ -147,13 +152,80 @@
         /* HIGHLIGHT NUMBERS */
         .big-number { font-size: 80px; font-weight: 900; color: var(--aiesec-blue); line-height: 1; letter-spacing: -3px; }
         .number-label { font-size: 18px; text-transform: uppercase; color: #777; letter-spacing: 1px; margin-top: 10px; font-weight: 700; }
+        /* RESPONSIVE DESIGN FOR MOBILE */
+@media (max-width: 1300px) {
+    .slide-container {
+        width: 95%; /* Container jadi fleksibel ikut lebar layar */
+        height: auto; /* Biar konten yang panjang ke bawah nggak kepotong */
+        min-height: 600px;
+    }
+    
+    .two-column {
+        grid-template-columns: 1fr; /* Jadi satu kolom (atas-bawah) di HP */
+        gap: 30px;
+    }
 
+    h1 { font-size: 40px; } /* Ukuran font mengecil biar pas di layar HP */
+    h2 { font-size: 32px; }
+}
+        /* STICKY NAVBAR IMPROVED */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background-color: var(--aiesec-dark-blue);
+            display: flex;
+            justify-content: space-between; /* Memisahkan logo dan menu ke ujung kiri-kanan */
+            align-items: center;
+            padding: 15px 10%; /* Padding lebih lebar biar nggak terlalu mepet ke pinggir layar */
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+
+        .navbar .logo {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 40px; /* Jarak antar tombol diperlebar biar nggak mepet */
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 12px; /* Area klik jadi lebih luas dan nyaman */
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1); /* Efek hover halus */
+            color: var(--aiesec-teal);
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+  <div class="logo">SGD Onboarding</div>
+  <ul class="nav-links">
+    <li><a href="#welcome">Home</a></li>
+    <li><a href="#target">Target</a></li>
+    <li><a href="#roles">Roles</a></li>
+    <li><a href="#strategy">Strategy</a></li>
+  </ul>
+</nav>
 
 <!-- Slide 1: Title Slide -->
-<div class="slide-container" style="background: white;">
+<div class="slide-container" id="welcome" style="background: white;">
     <!-- Decor -->
     <div class="decor-blob blob-blue" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
     <div class="decor-blob blob-teal" style="width: 300px; height: 300px; bottom: -50px; left: -50px;"></div>
@@ -345,7 +417,7 @@
 </div>
 
 <!-- Slide 8: Our Strategy (How to Win) -->
-<div class="slide-container">
+<div class="slide-container" id="strategy">
     <div class="content-area">
         <h2>Gimana Cara Kita Menang Target? 🧠</h2>
         <div class="grid-3">
@@ -372,7 +444,7 @@
 </div>
 
 <!-- Slide 9: The Money Talk -->
-<div class="slide-container">
+<div class="slide-container" id="target">
     <div class="decor-blob blob-teal" style="top: -100px; right: -100px; width: 400px; height: 400px;"></div>
     <div class="content-area">
         <div class="two-column">
@@ -442,7 +514,7 @@
 </div>
 
 <!-- Slide 12: Role Division -->
-<div class="slide-container">
+<div class="slide-container" id="roles">
     <div class="decor-blob blob-blue" style="bottom: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; border-radius: 50% 50% 0 0;"></div>
     <div class="content-area">
         <h2 style="text-align: center;">Pembagian Tugas Tim SGD 🤝</h2>
