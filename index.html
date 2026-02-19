@@ -14,7 +14,7 @@
             --aiesec-blue: #037ef3;
             --aiesec-dark-blue: #0a2f5e;
             --aiesec-teal: #4be8e8;
-            --aiesec-yellow: #f85a40;
+            --aiesec-yellow: #f85a40; /* Red/Orange accent */
             --aiesec-grey: #f3f4f7;
             --text-dark: #333333;
             --text-light: #ffffff;
@@ -22,26 +22,20 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 80px;
-        }
-
         body {
             background-color: #e2e8f0;
             display: grid;
-            gap: 20px;
+            gap: 30px;
             grid-template-columns: 1fr;
             min-height: 100vh;
-            padding: 20px 0;
+            padding: 40px 0;
             place-items: center;
             font-family: 'Lato', sans-serif;
         }
 
         .slide-container {
-            width: 100%;
-            max-width: 1280px;
-            min-height: 500px;
+            width: 1280px;
+            height: 720px;
             background-color: white;
             position: relative;
             overflow: hidden;
@@ -49,7 +43,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
-            padding: 20px;
         }
 
         /* TYPOGRAPHY */
@@ -57,7 +50,6 @@
         h1 { font-size: 72px; line-height: 1.1; margin-bottom: 20px; color: var(--aiesec-blue); z-index: 2; }
         h2 { font-size: 48px; margin-bottom: 25px; color: var(--aiesec-blue); z-index: 2; position: relative; }
         h3 { font-size: 26px; margin-bottom: 10px; color: var(--text-dark); }
-        h4 { font-size: 20px; margin-bottom: 8px; color: var(--text-dark); }
         p, li { font-size: 20px; color: #555; line-height: 1.6; }
         
         .handwritten {
@@ -68,7 +60,7 @@
             display: inline-block;
         }
 
-        /* DECORATIVE ELEMENTS */
+        /* DECORATIVE ELEMENTS (The "Random" Graphics) */
         .decor-blob {
             position: absolute;
             border-radius: 50%;
@@ -99,51 +91,25 @@
         }
 
         /* LAYOUT UTILS */
-        .content-area { 
-            padding: 40px 50px; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            z-index: 1; 
-            position: relative; 
-        }
-        
-        .two-column { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 40px; 
-            align-items: center; 
-            width: 100%;
-        }
-        
-        .grid-3 { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 30px; 
-            width: 100%; 
-        }
+        .content-area { padding: 40px 70px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 1; position: relative; }
+        .two-column { display: grid; grid-template-columns: 1fr 0.8fr; gap: 60px; align-items: center; height: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; }
         
         /* IMAGES */
         .image-wrapper { 
             border-radius: 20px; 
             overflow: hidden; 
-            width: 100%;
-            height: 300px;
-            box-shadow: 15px 15px 0px rgba(3, 126, 243, 0.1);
+            height: 100%; 
+            box-shadow: 15px 15px 0px rgba(3, 126, 243, 0.1); /* Graphic Shadow */
             position: relative;
             background: #eee;
         }
-        .image-wrapper img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-        }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
         /* CARDS */
         .card { 
             background: white; 
-            padding: 25px; 
+            padding: 30px; 
             border-radius: 16px; 
             border: 1px solid #eee;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
@@ -171,322 +137,36 @@
         }
 
         /* TABLE STYLE */
-        table { 
-            width: 100%; 
-            border-collapse: separate; 
-            border-spacing: 0 10px; 
-            margin-top: 10px; 
-        }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 10px; }
         th, td { padding: 20px; text-align: left; }
         th { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         td { background: white; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-        td:first-child { 
-            border-left: 5px solid var(--aiesec-blue); 
-            border-radius: 10px 0 0 10px; 
-            font-weight: bold; 
-            color: var(--aiesec-blue); 
-        }
+        td:first-child { border-left: 5px solid var(--aiesec-blue); border-radius: 10px 0 0 10px; font-weight: bold; color: var(--aiesec-blue); }
         td:last-child { border-right: 1px solid #eee; border-radius: 0 10px 10px 0; }
 
         /* HIGHLIGHT NUMBERS */
-        .big-number { 
-            font-size: 80px; 
-            font-weight: 900; 
-            color: var(--aiesec-blue); 
-            line-height: 1; 
-            letter-spacing: -3px; 
-        }
-        .number-label { 
-            font-size: 18px; 
-            text-transform: uppercase; 
-            color: #777; 
-            letter-spacing: 1px; 
-            margin-top: 10px; 
-            font-weight: 700; 
-        }
+        .big-number { font-size: 80px; font-weight: 900; color: var(--aiesec-blue); line-height: 1; letter-spacing: -3px; }
+        .number-label { font-size: 18px; text-transform: uppercase; color: #777; letter-spacing: 1px; margin-top: 10px; font-weight: 700; }
 
-        /* NAVBAR */
-        .navbar {
-            position: sticky;
-            top: 0;
-            background-color: var(--aiesec-dark-blue);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            z-index: 9999;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            width: 100%;
-        }
-
-        .navbar .logo {
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 20px;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--aiesec-teal);
-        }
-
-        /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            border-radius: 3px;
-            transition: 0.3s;
-        }
-
-        /* RESPONSIVE DESIGN */
-        @media (max-width: 1300px) {
-            .slide-container {
-                max-width: 95%;
-                margin: 0 10px;
-            }
-        }
-
-        @media (max-width: 968px) {
-            body {
-                padding: 10px 0;
-                gap: 15px;
-            }
-
-            .slide-container {
-                border-radius: 15px;
-                padding: 15px;
-            }
-
-            .content-area {
-                padding: 25px 20px;
-            }
-
-            /* Typography Mobile */
-            h1 { font-size: 36px !important; margin-bottom: 15px; }
-            h2 { font-size: 28px !important; margin-bottom: 20px; }
-            h3 { font-size: 20px; margin-bottom: 8px; }
-            h4 { font-size: 18px; }
-            p, li { font-size: 16px; }
-            .handwritten { font-size: 24px; }
-
-            /* Layout Mobile */
-            .two-column {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .grid-3 {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .image-wrapper {
-                height: 250px;
-                box-shadow: 10px 10px 0px rgba(3, 126, 243, 0.1);
-            }
-
-            /* Cards Mobile */
-            .card {
-                padding: 20px;
-            }
-
-            .icon-box {
-                width: 60px;
-                height: 60px;
-                font-size: 26px;
-                margin-bottom: 15px;
-            }
-
-            /* Numbers Mobile */
-            .big-number {
-                font-size: 50px;
-                letter-spacing: -2px;
-            }
-
-            .number-label {
-                font-size: 14px;
-            }
-
-            /* Table Mobile */
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 12px 10px;
-                font-size: 14px;
-            }
-
-            th {
-                font-size: 11px;
-            }
-
-            /* Navbar Mobile */
-            .navbar {
-                padding: 12px 5%;
-            }
-
-            .navbar .logo {
-                font-size: 18px;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: var(--aiesec-dark-blue);
-                flex-direction: column;
-                gap: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            }
-
-            .nav-links.active {
-                max-height: 300px;
-            }
-
-            .nav-links li {
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 15px 20px;
-                border-radius: 0;
-            }
-
-            /* Decorative Elements Mobile - Hide some */
-            .decor-blob {
-                opacity: 0.05;
-            }
-
-            .decor-dots {
-                width: 100px;
-                height: 100px;
-                background-size: 15px 15px;
-            }
-
-            .decor-stripe {
-                width: 100px;
-                height: 10px;
-            }
-
-            /* Specific Slide Adjustments */
-            .slide-container[style*="grid-template-columns: 1fr 0.8fr"] {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 5px 0;
-                gap: 10px;
-            }
-
-            .slide-container {
-                border-radius: 10px;
-                padding: 10px;
-            }
-
-            .content-area {
-                padding: 20px 15px;
-            }
-
-            h1 { font-size: 28px !important; }
-            h2 { font-size: 24px !important; }
-            h3 { font-size: 18px; }
-            p, li { font-size: 14px; }
-            .handwritten { font-size: 20px; }
-
-            .card {
-                padding: 15px;
-            }
-
-            .icon-box {
-                width: 50px;
-                height: 50px;
-                font-size: 22px;
-            }
-
-            .big-number {
-                font-size: 40px;
-            }
-
-            .image-wrapper {
-                height: 200px;
-            }
-
-            table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">SGD Onboarding</div>
-        <div class="hamburger" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#welcome" onclick="closeMenu()">Home</a></li>
-            <li><a href="#target" onclick="closeMenu()">Target</a></li>
-            <li><a href="#roles" onclick="closeMenu()">Roles</a></li>
-            <li><a href="#strategy" onclick="closeMenu()">Strategy</a></li>
-        </ul>
-    </nav>
 
 <!-- Slide 1: Title Slide -->
-<div class="slide-container" id="welcome" style="background: white;">
+<div class="slide-container" style="background: white;">
     <!-- Decor -->
     <div class="decor-blob blob-blue" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
     <div class="decor-blob blob-teal" style="width: 300px; height: 300px; bottom: -50px; left: -50px;"></div>
     <div class="decor-dots" style="top: 100px; left: 50px;"></div>
 
-    <div class="content-area" style="align-items: flex-start; justify-content: center;">
+    <div class="content-area" style="align-items: flex-start; justify-content: center; padding-left: 100px;">
         <span class="handwritten">Hey Newies! Welcome to...</span>
         <h1 style="font-size: 90px;">FUNCTIONAL<br>ONBOARDING:<br><span style="color: var(--aiesec-teal);">SGD</span> 🌏</h1>
         <p style="font-size: 28px; color: #555; max-width: 600px;">Strategic Global Development<br><strong>AIESEC in UMM</strong></p>
         
-        <div style="margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap;">
-            <div style="padding: 10px 20px; background: var(--aiesec-blue); color: white; border-radius: 50px; font-weight: bold; font-size: 14px;">💙 Business Development</div>
-            <div style="padding: 10px 20px; background: var(--aiesec-grey); color: var(--aiesec-dark-blue); border-radius: 50px; font-weight: bold; font-size: 14px;">🚀 Induction Day</div>
+        <div style="margin-top: 40px; display: flex; gap: 20px;">
+            <div style="padding: 10px 20px; background: var(--aiesec-blue); color: white; border-radius: 50px; font-weight: bold;">💙 Business Development</div>
+            <div style="padding: 10px 20px; background: var(--aiesec-grey); color: var(--aiesec-dark-blue); border-radius: 50px; font-weight: bold;">🚀 Induction Day</div>
         </div>
     </div>
 </div>
@@ -532,7 +212,7 @@
                 <p><strong>Business Development (BD)</strong> itu ibarat "Jantung"-nya AIESEC.</p>
                 <p>Tugas kita simple: Nyari "bahan bakar" biar organisasi tetep jalan.</p>
                 <br>
-                <div class="grid-3" style="grid-template-columns: 1fr 1fr;">
+                <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div class="card">
                         <div class="icon-box"><i class="fa-solid fa-money-bill-wave"></i></div>
                         <h3>Financial</h3>
@@ -561,7 +241,7 @@
                 <br>
                 <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
                     <p>🎯 <strong>Main Mission:</strong></p>
-                    <p>Cari partner / startup buat support program internasional <strong>IGV (Incoming)</strong> atau <strong>OGX (Outgoing)</strong>. Biar makin banyak 'bule' yang dateng dan member kita yang berangkat!</p>
+                    <p>Cari partner / startupbuat support program internasional <strong>IGV (Incoming)</strong> atau <strong>OGX (Outgoing)</strong>. Biar makin banyak 'bule' yang dateng dan member kita yang berangkat!</p>
                 </div>
             </div>
             <div class="image-wrapper">
@@ -628,6 +308,7 @@
                 <h3>Goal Setting</h3>
                 <p>Set target revenue & eksekusi sales flow dari awal sampe deal.</p>
             </div>
+            <!-- Row 2 implied or 3 items focused -->
         </div>
         <p style="margin-top: 30px; text-align: center; color: #888;">+ LC Cost Reduction & Executing Sales Flow!</p>
     </div>
@@ -664,7 +345,7 @@
 </div>
 
 <!-- Slide 8: Our Strategy (How to Win) -->
-<div class="slide-container" id="strategy">
+<div class="slide-container">
     <div class="content-area">
         <h2>Gimana Cara Kita Menang Target? 🧠</h2>
         <div class="grid-3">
@@ -691,7 +372,7 @@
 </div>
 
 <!-- Slide 9: The Money Talk -->
-<div class="slide-container" id="target">
+<div class="slide-container">
     <div class="decor-blob blob-teal" style="top: -100px; right: -100px; width: 400px; height: 400px;"></div>
     <div class="content-area">
         <div class="two-column">
@@ -700,15 +381,15 @@
                 <p>Target BD satu term ini totalnya <strong>30 Juta</strong>.</p>
                 <div style="margin-top: 30px;">
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">1</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">1</div>
                         <p>Dibagi 3 Functional: SGD, SYD, SBD.</p>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">2</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">2</div>
                         <p>SGD kebagian target: <strong>10 Juta</strong>.</p>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">3</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">3</div>
                         <p>Waktu Efektif: <strong>8 Bulan</strong> (Maret - Nov).</p>
                     </div>
                 </div>
@@ -761,7 +442,7 @@
 </div>
 
 <!-- Slide 12: Role Division -->
-<div class="slide-container" id="roles">
+<div class="slide-container">
     <div class="decor-blob blob-blue" style="bottom: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; border-radius: 50% 50% 0 0;"></div>
     <div class="content-area">
         <h2 style="text-align: center;">Pembagian Tugas Tim SGD 🤝</h2>
@@ -866,7 +547,7 @@
 <div class="slide-container" style="background: white; justify-content: center; align-items: center; text-align: center;">
     <div class="decor-blob blob-blue" style="width: 800px; height: 800px; opacity: 0.05;"></div>
     <div class="content-area" style="z-index: 2; align-items: center;">
-        <div class="image-wrapper" style="max-width: 500px; margin: 0 auto 30px; border-radius: 20px;">
+        <div class="image-wrapper" style="height: 300px; width: 500px; margin-bottom: 30px; border-radius: 20px;">
              <img src="lgd.jpeg" alt="LGD Team">
         </div>
         <h1>Ada Pertanyaan, Guys? 🤔</h1>
@@ -874,32 +555,10 @@
         <p style="font-size: 24px; font-weight: bold; color: var(--aiesec-blue); margin-top: 20px;">Let's make Strategic Global Development Great!</p>
         
         <div style="margin-top: 40px;">
-            <a href="#welcome" style="background: var(--aiesec-blue); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 20px; box-shadow: 0 10px 20px rgba(3, 126, 243, 0.3); display: inline-block;">Let's Start! 🚀</a>
+            <a href="#" style="background: var(--aiesec-blue); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 20px; box-shadow: 0 10px 20px rgba(3, 126, 243, 0.3);">Let's Start! 🚀</a>
         </div>
     </div>
 </div>
-
-<script>
-function toggleMenu() {
-    const navLinks = document.getElementById('navLinks');
-    navLinks.classList.toggle('active');
-}
-
-function closeMenu() {
-    const navLinks = document.getElementById('navLinks');
-    navLinks.classList.remove('active');
-}
-
-// Close menu when clicking outside
-document.addEventListener('click', function(event) {
-    const navbar = document.querySelector('.navbar');
-    const navLinks = document.getElementById('navLinks');
-    
-    if (!navbar.contains(event.target)) {
-        navLinks.classList.remove('active');
-    }
-});
-</script>
 
 </body>
 </html>
