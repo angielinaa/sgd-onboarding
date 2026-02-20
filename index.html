@@ -36,7 +36,7 @@
             padding: 20px 0;
             place-items: center;
             font-family: 'Lato', sans-serif;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.5s ease;
         }
 
@@ -51,74 +51,369 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--aiesec-dark-blue) 0%, var(--aiesec-blue) 100%);
+            background: linear-gradient(135deg, #0080F5 0%, #037EF3 50%, #0066CC 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 99999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            z-index: 999999;
+            transition: none;
+            opacity: 1;
+            visibility: visible;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Floating Background Shapes */
+        .loading-bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: floatShape 20s infinite ease-in-out;
+        }
+
+        .loading-bg-shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+            animation-duration: 15s;
+        }
+
+        .loading-bg-shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 2s;
+            animation-duration: 18s;
+        }
+
+        .loading-bg-shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            right: 10%;
+            animation-delay: 4s;
+            animation-duration: 20s;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.1;
+            }
+            33% {
+                transform: translate(50px, -50px) rotate(120deg);
+                opacity: 0.2;
+            }
+            66% {
+                transform: translate(-30px, 30px) rotate(240deg);
+                opacity: 0.15;
+            }
+        }
+
+        #loading-screen.circle-wipe-out {
+            animation: circleWipeOut 1s ease-in-out forwards;
+            background: #0080F5; /* Maintain blue background during animation */
+        }
+
+        @keyframes circleWipeOut {
+            0% {
+                clip-path: circle(150% at 50% 50%);
+                opacity: 1;
+            }
+            100% {
+                clip-path: circle(0% at 50% -50%);
+                opacity: 1;
+            }
         }
 
         #loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
+            display: none;
         }
 
-        .loading-logo {
-            width: 150px;
-            height: 150px;
-            background: white;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            animation: pulse 1.5s ease-in-out infinite;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            position: relative;
+        .loading-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .loading-logo img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-            position: absolute;
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .loading-logo::before {
-            content: "AIESEC";
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 24px;
-            color: var(--aiesec-blue);
+        .loading-title {
+            font-family: 'Lato', sans-serif;
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffffff, #4be8e8, #ffffff, #4be8e8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: textGradient 3s ease infinite, textFloat 2s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            filter: drop-shadow(0 0 20px rgba(75, 232, 232, 0.6));
+        }
+
+        @keyframes textGradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes textFloat {
+            0%, 100% { 
+                transform: translateY(0) scale(1); 
+            }
+            50% { 
+                transform: translateY(-10px) scale(1.05); 
+            }
+        }
+
+        .loading-subtitle {
+            font-family: 'Lato', sans-serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: #4be8e8;
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(75, 232, 232, 0.8);
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { 
+                opacity: 0.9;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.02);
+            }
         }
 
-        .loading-text {
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
+        .loading-badge {
+            display: inline-block;
+            font-family: 'Lato', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--aiesec-blue);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(75, 232, 232, 0.5);
+            animation: badgeGlow 2s ease-in-out infinite, badgeBounce 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(75, 232, 232, 0.3), transparent);
+            animation: badgeShine 3s infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% {
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(75, 232, 232, 0.5);
+            }
+            50% {
+                box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 50px rgba(75, 232, 232, 0.8);
+            }
+        }
+
+        @keyframes badgeBounce {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-5px) rotate(-2deg);
+            }
+            75% {
+                transform: translateY(-5px) rotate(2deg);
+            }
+        }
+
+        @keyframes badgeShine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        /* Loading Progress Bar */
+        .loading-progress-container {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .loading-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .loading-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4be8e8, #ffffff, #4be8e8);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            animation: progressFill 5s ease-in-out forwards, progressShine 2s linear infinite;
+            box-shadow: 0 0 20px rgba(75, 232, 232, 0.8), 0 0 40px rgba(75, 232, 232, 0.4);
+            position: relative;
+        }
+
+        .loading-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: progressGlimmer 1.5s infinite;
+        }
+
+        @keyframes progressFill {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes progressShine {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes progressGlimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .loading-progress-text {
+            margin-top: 15px;
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 20px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: textPulse 1.5s ease-in-out infinite;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        @keyframes textPulse {
+            0%, 100% {
+                opacity: 0.7;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Responsive Loading Screen */
+        @media (max-width: 768px) {
+            .loading-title {
+                font-size: 40px;
+            }
+            
+            .loading-subtitle {
+                font-size: 24px;
+            }
+            
+            .loading-badge {
+                font-size: 20px;
+                padding: 10px 25px;
+            }
+
+            .loading-progress-container {
+                width: 300px;
+                bottom: 60px;
+            }
+
+            .loading-progress-bar {
+                height: 5px;
+            }
+
+            .loading-progress-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loading-title {
+                font-size: 32px;
+            }
+            
+            .loading-subtitle {
+                font-size: 20px;
+            }
+
+            .loading-progress-container {
+                width: 250px;
+                bottom: 50px;
+            }
+
+            .loading-progress-bar {
+                height: 4px;
+            }
+
+            .loading-progress-text {
+                font-size: 14px;
+            }
+        }
+            
+            .loading-badge {
+                font-size: 18px;
+                padding: 8px 20px;
+            }
         }
 
         /* PROGRESS BAR */
@@ -131,6 +426,14 @@
             background: rgba(255,255,255,0.2);
             z-index: 9998;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        body.loaded #progress-container {
+            opacity: 1;
+            visibility: visible;
         }
 
         #progress-bar {
@@ -172,6 +475,13 @@
             align-items: center;
             gap: 10px;
             transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        body.loaded #slide-counter {
+            opacity: 1;
+            visibility: visible;
         }
 
         #slide-counter:hover {
@@ -238,6 +548,11 @@
             opacity: 0;
             transform: translateY(50px);
             transition: opacity 0.6s ease, transform 0.6s ease;
+            visibility: hidden;
+        }
+
+        body.loaded .slide-container {
+            visibility: visible;
         }
 
         .slide-container.animate {
@@ -796,6 +1111,14 @@
             z-index: 9999;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        body.loaded .navbar {
+            opacity: 1;
+            visibility: visible;
         }
 
         .navbar .logo {
@@ -857,6 +1180,7 @@
             flex-direction: column;
             cursor: pointer;
             gap: 5px;
+            z-index: 1001;
         }
 
         .hamburger span {
@@ -869,6 +1193,71 @@
 
         .hamburger:hover span {
             background-color: var(--aiesec-teal);
+        }
+
+        /* Dropdown/Submenu Styles */
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links .has-submenu > a::after {
+            content: ' ▼';
+            font-size: 12px;
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-links .has-submenu:hover > a::after {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            padding: 10px 0;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .has-submenu:hover .submenu {
+            display: block;
+        }
+
+        .submenu li {
+            list-style: none;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--aiesec-dark-blue);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu a:hover {
+            background: rgba(0, 128, 245, 0.1);
+            border-left-color: var(--aiesec-blue);
+            color: var(--aiesec-blue);
+            padding-left: 25px;
         }
 
         /* CONFETTI ANIMATION */
@@ -1056,7 +1445,7 @@
             }
 
             .nav-links.active {
-                max-height: 300px;
+                max-height: 500px;
             }
 
             .nav-links li {
@@ -1067,6 +1456,30 @@
                 display: block;
                 padding: 15px 20px;
                 border-radius: 0;
+            }
+
+            /* Mobile Submenu */
+            .submenu {
+                position: static;
+                display: none;
+                background: rgba(0, 0, 0, 0.2);
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+                animation: none;
+            }
+
+            .has-submenu.active .submenu {
+                display: block;
+            }
+
+            .submenu a {
+                padding-left: 40px;
+                font-size: 14px;
+            }
+
+            .nav-links .has-submenu > a::after {
+                float: right;
             }
 
             .decor-blob {
@@ -1197,11 +1610,24 @@
 <body>
     <!-- LOADING SCREEN -->
     <div id="loading-screen">
-        <div class="loading-logo">
-            <!-- <img src="logo-aiesec.png" alt="AIESEC Logo"> -->
+        <!-- Floating Background Shapes -->
+        <div class="loading-bg-shape"></div>
+        <div class="loading-bg-shape"></div>
+        <div class="loading-bg-shape"></div>
+        
+        <div class="loading-content">
+            <div class="loading-title">Welcome to SGD🥳</div>
+            <div class="loading-subtitle">Business Development</div>
+            <div class="loading-badge">AIESEC in UMM</div>
         </div>
-        <div class="loading-text">Loading SGD Onboarding...</div>
-        <div class="loading-spinner"></div>
+        
+        <!-- Progress Bar -->
+        <div class="loading-progress-container">
+            <div class="loading-progress-bar">
+                <div class="loading-progress-fill"></div>
+            </div>
+            <div class="loading-progress-text">Loading amazing content...</div>
+        </div>
     </div>
 
     <!-- PROGRESS BAR -->
@@ -1228,9 +1654,15 @@
         </div>
         <ul class="nav-links" id="navLinks">
             <li><a href="#welcome" onclick="closeMenu()">Home</a></li>
-            <li><a href="#target" onclick="closeMenu()">Target</a></li>
-            <li><a href="#roles" onclick="closeMenu()">Roles</a></li>
-            <li><a href="#strategy" onclick="closeMenu()">Strategy</a></li>
+            <li class="has-submenu" onclick="toggleSubmenu(event, this)">
+                <a href="javascript:void(0)">Content</a>
+                <ul class="submenu">
+                    <li><a href="#target" onclick="closeMenu()">Target</a></li>
+                    <li><a href="#roles" onclick="closeMenu()">Roles</a></li>
+                    <li><a href="#strategy" onclick="closeMenu()">Strategy</a></li>
+                </ul>
+            </li>
+            <li><a href="introduction.html">Introduction</a></li>
         </ul>
     </nav>
 
@@ -1247,7 +1679,7 @@
         
         <div style="margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap;">
             <div class="badge shine" style="background: var(--aiesec-blue); color: white;">💙 Business Development</div>
-            <div class="badge shine" style="background: var(--aiesec-grey); color: var(--aiesec-dark-blue);">🚀 Induction Day</div>
+            <a href="introduction.html" class="badge shine" style="background: var(--aiesec-grey); color: var(--aiesec-dark-blue); text-decoration: none; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚀 Introduction</a>
         </div>
     </div>
 </div>
@@ -1641,18 +2073,35 @@
 
 <script>
 // ==================== LOADING SCREEN ====================
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Ensure loading screen is visible from start
+    if (loadingScreen) {
+        loadingScreen.style.display = 'flex';
+        loadingScreen.style.opacity = '1';
+        loadingScreen.style.visibility = 'visible';
+    }
+    
+    // Circle wipe out animation after 5 seconds (when progress bar finishes)
     setTimeout(function() {
-        document.getElementById('loading-screen').classList.add('hidden');
+        if (loadingScreen) {
+            loadingScreen.classList.add('circle-wipe-out');
+        }
         document.body.classList.add('loaded');
         
+        // Hide loading screen completely after animation finishes
         setTimeout(function() {
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+            }
+            
             const firstSlide = document.querySelector('.slide-container');
             if (firstSlide) {
                 firstSlide.classList.add('animate');
             }
-        }, 100);
-    }, 1500);
+        }, 1000);
+    }, 5000);
 });
 
 // ==================== NUMBER COUNTING ANIMATION - REVISI ====================
@@ -1816,6 +2265,19 @@ function toggleMenu() {
 function closeMenu() {
     const navLinks = document.getElementById('navLinks');
     navLinks.classList.remove('active');
+    // Close all submenus
+    document.querySelectorAll('.has-submenu').forEach(item => {
+        item.classList.remove('active');
+    });
+}
+
+function toggleSubmenu(event, element) {
+    // Only on mobile
+    if (window.innerWidth <= 768) {
+        event.preventDefault();
+        event.stopPropagation();
+        element.classList.toggle('active');
+    }
 }
 
 document.addEventListener('click', function(event) {
