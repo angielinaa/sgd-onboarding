@@ -14,7 +14,7 @@
             --aiesec-blue: #037ef3;
             --aiesec-dark-blue: #0a2f5e;
             --aiesec-teal: #4be8e8;
-            --aiesec-yellow: #f85a40; /* Red/Orange accent */
+            --aiesec-yellow: #f85a40;
             --aiesec-grey: #f3f4f7;
             --text-dark: #333333;
             --text-light: #ffffff;
@@ -22,20 +22,211 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
         body {
             background-color: #e2e8f0;
             display: grid;
-            gap: 30px;
+            gap: 20px;
             grid-template-columns: 1fr;
             min-height: 100vh;
-            padding: 40px 0;
+            padding: 20px 0;
             place-items: center;
             font-family: 'Lato', sans-serif;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
+        body.loaded {
+            opacity: 1;
+        }
+
+        /* LOADING SCREEN */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--aiesec-dark-blue) 0%, var(--aiesec-blue) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .loading-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            position: absolute;
+        }
+
+        .loading-logo::before {
+            content: "AIESEC";
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--aiesec-blue);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .loading-text {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* PROGRESS BAR */
+        #progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            z-index: 9998;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--aiesec-blue), var(--aiesec-teal));
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        #progress-bar::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--aiesec-teal);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--aiesec-teal);
+        }
+
+        /* SLIDE COUNTER */
+        #slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--aiesec-dark-blue);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 9998;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #slide-counter:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        #slide-counter .current {
+            color: var(--aiesec-teal);
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        /* BACK TO TOP BUTTON */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 9998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(3, 126, 243, 0.4);
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #back-to-top:hover {
+            background: var(--aiesec-teal);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(3, 126, 243, 0.6);
+        }
+
+        #back-to-top:active {
+            transform: translateY(-2px);
+        }
+
+        /* SLIDE ANIMATIONS */
         .slide-container {
-            width: 1280px;
-            height: 720px;
+            width: 100%;
+            max-width: 1280px;
+            min-height: 500px;
             background-color: white;
             position: relative;
             overflow: hidden;
@@ -43,29 +234,75 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .slide-container.animate {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* TYPOGRAPHY */
         h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 800; }
-        h1 { font-size: 72px; line-height: 1.1; margin-bottom: 20px; color: var(--aiesec-blue); z-index: 2; }
-        h2 { font-size: 48px; margin-bottom: 25px; color: var(--aiesec-blue); z-index: 2; position: relative; }
-        h3 { font-size: 26px; margin-bottom: 10px; color: var(--text-dark); }
+        h1 { 
+            font-size: 72px; 
+            line-height: 1.1; 
+            margin-bottom: 20px; 
+            color: var(--aiesec-blue); 
+            z-index: 2;
+            animation: fadeInUp 0.8s ease;
+        }
+        h2 { 
+            font-size: 48px; 
+            margin-bottom: 25px; 
+            color: var(--aiesec-blue); 
+            z-index: 2; 
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.1s backwards;
+        }
+        h3 { 
+            font-size: 26px; 
+            margin-bottom: 10px; 
+            color: var(--text-dark);
+        }
+        h4 { font-size: 20px; margin-bottom: 8px; color: var(--text-dark); }
         p, li { font-size: 20px; color: #555; line-height: 1.6; }
         
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .handwritten {
             font-family: 'Caveat', cursive;
             color: var(--aiesec-yellow);
             font-size: 32px;
             transform: rotate(-5deg);
             display: inline-block;
+            animation: wiggle 2s ease-in-out infinite;
         }
 
-        /* DECORATIVE ELEMENTS (The "Random" Graphics) */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(-3deg); }
+        }
+
+        /* DECORATIVE ELEMENTS WITH PARALLAX */
         .decor-blob {
             position: absolute;
             border-radius: 50%;
             opacity: 0.1;
             z-index: 0;
+            transition: transform 0.3s ease;
         }
         .blob-blue { background-color: var(--aiesec-blue); }
         .blob-teal { background-color: var(--aiesec-teal); }
@@ -79,6 +316,12 @@
             background-size: 20px 20px;
             opacity: 0.2;
             z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
         .decor-stripe {
@@ -88,103 +331,940 @@
             width: 200px;
             transform: rotate(-45deg);
             z-index: 0;
+            animation: slideStripe 8s ease-in-out infinite;
+        }
+
+        @keyframes slideStripe {
+            0%, 100% { transform: rotate(-45deg) translateX(0); }
+            50% { transform: rotate(-45deg) translateX(20px); }
         }
 
         /* LAYOUT UTILS */
-        .content-area { padding: 40px 70px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 1; position: relative; }
-        .two-column { display: grid; grid-template-columns: 1fr 0.8fr; gap: 60px; align-items: center; height: 100%; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; }
+        .content-area { 
+            padding: 40px 50px; 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            z-index: 1; 
+            position: relative; 
+        }
+        
+        .two-column { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            align-items: center; 
+            width: 100%;
+        }
+        
+        .grid-3 { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            width: 100%; 
+        }
         
         /* IMAGES */
         .image-wrapper { 
             border-radius: 20px; 
             overflow: hidden; 
-            height: 100%; 
-            box-shadow: 15px 15px 0px rgba(3, 126, 243, 0.1); /* Graphic Shadow */
+            width: 100%;
+            height: 300px;
+            box-shadow: 15px 15px 0px rgba(3, 126, 243, 0.1);
             position: relative;
             background: #eee;
+            transition: all 0.4s ease;
         }
-        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* CARDS */
+        .image-wrapper:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 20px 20px 0px rgba(3, 126, 243, 0.2);
+        }
+
+        .image-wrapper img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .image-wrapper:hover img {
+            transform: scale(1.1);
+        }
+
+        /* CARDS - DIPERBAIKI BIAR GRADIENT MENYATU */
         .card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 16px; 
-            border: 1px solid #eee;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            background: linear-gradient(180deg, 
+                var(--aiesec-blue) 0%, 
+                var(--aiesec-blue) 6px, 
+                white 6px, 
+                white 100%
+            );
+            padding: 30px 25px 25px 25px;
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             height: 100%; 
             position: relative;
-            transition: transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--aiesec-blue); }
+
+        /* Gradient effect yang menyatu */
         .card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 6px;
             background: linear-gradient(90deg, var(--aiesec-blue), var(--aiesec-teal));
             border-radius: 16px 16px 0 0;
+            z-index: 1;
         }
 
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(3, 126, 243, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(3, 126, 243, 0.2);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        /* Make card content above the gradient overlay */
+        .card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Variant cards untuk slide WIGs */
+        .card.stat-card {
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                white 0%
+            );
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .card.stat-card::before {
+            height: 100%;
+            opacity: 0.05;
+            border-radius: 16px;
+        }
+
+        .card.stat-card:hover {
+            border-color: var(--aiesec-blue);
+        }
+
+        /* Icon box dengan animasi floating */
         .icon-box {
-            width: 70px; height: 70px;
-            background: var(--aiesec-grey);
+            width: 70px; 
+            height: 70px;
+            background: linear-gradient(135deg, var(--aiesec-grey), #e3e8f0);
             border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; color: var(--aiesec-blue);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 30px; 
+            color: var(--aiesec-blue);
             margin-bottom: 20px;
+            animation: floatIcon 3s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
-        /* TABLE STYLE */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; margin-top: 10px; }
-        th, td { padding: 20px; text-align: left; }
-        th { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        td { background: white; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-        td:first-child { border-left: 5px solid var(--aiesec-blue); border-radius: 10px 0 0 10px; font-weight: bold; color: var(--aiesec-blue); }
-        td:last-child { border-right: 1px solid #eee; border-radius: 0 10px 10px 0; }
+        .card:hover .icon-box {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 25px rgba(3, 126, 243, 0.3);
+        }
 
-        /* HIGHLIGHT NUMBERS */
-        .big-number { font-size: 80px; font-weight: 900; color: var(--aiesec-blue); line-height: 1; letter-spacing: -3px; }
-        .number-label { font-size: 18px; text-transform: uppercase; color: #777; letter-spacing: 1px; margin-top: 10px; font-weight: 700; }
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
 
+        /* TABLE STYLE - FIXED WIDTH */
+        table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0 10px; 
+            margin-top: 10px; 
+            table-layout: fixed;
+        }
+        
+        th, td { 
+            padding: 15px;
+            text-align: left !important;
+            transition: all 0.3s ease;
+        }
+        
+        th { 
+            color: #888; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        
+        th:first-child {
+            width: 30%;
+        }
+        
+        th:last-child {
+            width: 70%;
+        }
+        
+        td { 
+            background: white; 
+            border-top: 1px solid #eee; 
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        td:first-child { 
+            border-left: 5px solid var(--aiesec-blue); 
+            border-radius: 10px 0 0 10px; 
+            font-weight: bold; 
+            color: var(--aiesec-blue);
+            width: 30%;
+            word-wrap: break-word;
+            padding-left: 15px !important;
+        }
+        
+        td:last-child { 
+            border-right: 1px solid #eee; 
+            border-radius: 0 10px 10px 0;
+            width: 70%;
+            padding-left: 15px !important;
+        }
+
+        tbody tr:hover td {
+            background: #f8faff;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* HIGHLIGHT NUMBERS WITH COUNTING ANIMATION */
+        .big-number { 
+            font-size: 80px; 
+            font-weight: 900; 
+            color: var(--aiesec-blue); 
+            line-height: 1; 
+            letter-spacing: -3px;
+            background: linear-gradient(135deg, var(--aiesec-blue), var(--aiesec-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .number-label { 
+            font-size: 18px; 
+            text-transform: uppercase; 
+            color: #777; 
+            letter-spacing: 1px; 
+            margin-top: 10px; 
+            font-weight: 700; 
+        }
+
+        /* INTERACTIVE TOOLTIPS */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--aiesec-dark-blue);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--aiesec-dark-blue);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tooltip:hover::after,
+        .tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* GLASSMORPHISM EFFECT */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* IMPORTANT INFO BOX - NEW EYE-CATCHING DESIGN */
+        .important-info-box {
+            background: linear-gradient(135deg, rgba(248, 90, 64, 0.15), rgba(3, 126, 243, 0.15));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 850px;
+            margin: 30px auto;
+            border: 3px solid var(--aiesec-teal);
+            box-shadow: 
+                0 15px 50px rgba(3, 126, 243, 0.3),
+                0 0 0 1px rgba(255,255,255,0.1) inset,
+                0 0 30px rgba(75, 232, 232, 0.4);
+            position: relative;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 15px 50px rgba(3, 126, 243, 0.3),
+                    0 0 0 1px rgba(255,255,255,0.1) inset,
+                    0 0 30px rgba(75, 232, 232, 0.4);
+            }
+            50% {
+                box-shadow: 
+                    0 20px 60px rgba(3, 126, 243, 0.5),
+                    0 0 0 1px rgba(255,255,255,0.2) inset,
+                    0 0 50px rgba(75, 232, 232, 0.7);
+            }
+        }
+
+        .important-info-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            background: linear-gradient(135deg, var(--aiesec-yellow), var(--aiesec-blue));
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(248, 90, 64, 0.5);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .important-info-box p {
+            color: white;
+            font-size: 22px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            line-height: 1.6;
+        }
+
+        .important-info-box::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--aiesec-blue), var(--aiesec-teal), var(--aiesec-yellow), var(--aiesec-blue));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .important-info-box:hover::after {
+            opacity: 0.3;
+        }
+
+        /* BADGE ANIMATIONS */
+        .badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .badge:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* EMOJI FLOAT ANIMATION */
+        .emoji {
+            display: inline-block;
+            animation: emojiFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(10deg); }
+        }
+
+        /* SHINE EFFECT */
+        .shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.4), 
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .shine:hover::before {
+            left: 100%;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background-color: var(--aiesec-dark-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+
+        .navbar .logo {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            transform: scale(1.05);
+            color: var(--aiesec-teal);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--aiesec-teal);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::before {
+            width: 80%;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--aiesec-teal);
+            transform: translateY(-2px);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .hamburger:hover span {
+            background-color: var(--aiesec-teal);
+        }
+
+        /* CONFETTI ANIMATION */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--aiesec-blue);
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* BUTTON ANIMATIONS */
+        .btn-primary {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--aiesec-blue), var(--aiesec-teal));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 10px 30px rgba(3, 126, 243, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(3, 126, 243, 0.5);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* PULSE ANIMATION FOR IMPORTANT ELEMENTS */
+        .pulse {
+            animation: pulse-animation 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-animation {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(3, 126, 243, 0.7);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 0 0 10px rgba(3, 126, 243, 0);
+            }
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1300px) {
+            .slide-container {
+                max-width: 95%;
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            body {
+                padding: 10px 0;
+                gap: 15px;
+            }
+
+            .slide-container {
+                border-radius: 15px;
+                padding: 15px;
+            }
+
+            .content-area {
+                padding: 25px 20px;
+            }
+
+            h1 { font-size: 36px !important; margin-bottom: 15px; }
+            h2 { font-size: 28px !important; margin-bottom: 20px; }
+            h3 { font-size: 20px; margin-bottom: 8px; }
+            h4 { font-size: 18px; }
+            p, li { font-size: 16px; }
+            .handwritten { font-size: 24px; }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .image-wrapper {
+                height: 250px;
+                box-shadow: 10px 10px 0px rgba(3, 126, 243, 0.1);
+            }
+
+            .card {
+                padding: 25px 20px 20px 20px;
+            }
+
+            .icon-box {
+                width: 60px;
+                height: 60px;
+                font-size: 26px;
+                margin-bottom: 15px;
+            }
+
+            .big-number {
+                font-size: 50px;
+                letter-spacing: -2px;
+            }
+
+            .number-label {
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+
+            th {
+                font-size: 11px;
+            }
+
+            .navbar {
+                padding: 12px 5%;
+            }
+
+            .navbar .logo {
+                font-size: 18px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--aiesec-dark-blue);
+                flex-direction: column;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+
+            .nav-links.active {
+                max-height: 300px;
+            }
+
+            .nav-links li {
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 15px 20px;
+                border-radius: 0;
+            }
+
+            .decor-blob {
+                opacity: 0.05;
+            }
+
+            .decor-dots {
+                width: 100px;
+                height: 100px;
+                background-size: 15px 15px;
+            }
+
+            .decor-stripe {
+                width: 100px;
+                height: 10px;
+            }
+
+            #slide-counter {
+                bottom: 20px;
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+
+            #slide-counter .current {
+                font-size: 16px;
+            }
+
+            #back-to-top {
+                bottom: 80px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            #progress-container {
+                top: 59px;
+            }
+
+            .btn-primary {
+                font-size: 16px;
+                padding: 12px 30px;
+            }
+
+            .important-info-box {
+                padding: 30px 25px;
+                margin: 20px auto;
+            }
+
+            .important-info-box p {
+                font-size: 18px;
+            }
+
+            .important-info-box::before {
+                font-size: 30px;
+                width: 50px;
+                height: 50px;
+                top: -15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 5px 0;
+                gap: 10px;
+            }
+
+            .slide-container {
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            .content-area {
+                padding: 20px 15px;
+            }
+
+            h1 { font-size: 28px !important; }
+            h2 { font-size: 24px !important; }
+            h3 { font-size: 18px; }
+            p, li { font-size: 14px; }
+            .handwritten { font-size: 20px; }
+
+            .card {
+                padding: 20px 15px 15px 15px;
+            }
+
+            .icon-box {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .big-number {
+                font-size: 40px;
+            }
+
+            .image-wrapper {
+                height: 200px;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            #back-to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                right: 15px;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+
+            .important-info-box {
+                padding: 25px 20px;
+            }
+
+            .important-info-box p {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+        <div class="loading-logo">
+            <!-- <img src="logo-aiesec.png" alt="AIESEC Logo"> -->
+        </div>
+        <div class="loading-text">Loading SGD Onboarding...</div>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- SLIDE COUNTER -->
+    <div id="slide-counter">
+        <span class="current">1</span> / <span class="total">16</span>
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button id="back-to-top" onclick="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <nav class="navbar">
+        <div class="logo">SGD Onboarding</div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#welcome" onclick="closeMenu()">Home</a></li>
+            <li><a href="#target" onclick="closeMenu()">Target</a></li>
+            <li><a href="#roles" onclick="closeMenu()">Roles</a></li>
+            <li><a href="#strategy" onclick="closeMenu()">Strategy</a></li>
+        </ul>
+    </nav>
 
 <!-- Slide 1: Title Slide -->
-<div class="slide-container" style="background: white;">
-    <!-- Decor -->
+<div class="slide-container" id="welcome" style="background: white;">
     <div class="decor-blob blob-blue" style="width: 600px; height: 600px; top: -200px; right: -200px;"></div>
     <div class="decor-blob blob-teal" style="width: 300px; height: 300px; bottom: -50px; left: -50px;"></div>
     <div class="decor-dots" style="top: 100px; left: 50px;"></div>
 
-    <div class="content-area" style="align-items: flex-start; justify-content: center; padding-left: 100px;">
+    <div class="content-area" style="align-items: flex-start; justify-content: center;">
         <span class="handwritten">Hey Newies! Welcome to...</span>
-        <h1 style="font-size: 90px;">FUNCTIONAL<br>ONBOARDING:<br><span style="color: var(--aiesec-teal);">SGD</span> 🌏</h1>
+        <h1 style="font-size: 90px;">FUNCTIONAL<br>ONBOARDING:<br><span style="color: var(--aiesec-teal);">SGD</span> <span class="emoji">🌏</span></h1>
         <p style="font-size: 28px; color: #555; max-width: 600px;">Strategic Global Development<br><strong>AIESEC in UMM</strong></p>
         
-        <div style="margin-top: 40px; display: flex; gap: 20px;">
-            <div style="padding: 10px 20px; background: var(--aiesec-blue); color: white; border-radius: 50px; font-weight: bold;">💙 Business Development</div>
-            <div style="padding: 10px 20px; background: var(--aiesec-grey); color: var(--aiesec-dark-blue); border-radius: 50px; font-weight: bold;">🚀 Induction Day</div>
+        <div style="margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap;">
+            <div class="badge shine" style="background: var(--aiesec-blue); color: white;">💙 Business Development</div>
+            <div class="badge shine" style="background: var(--aiesec-grey); color: var(--aiesec-dark-blue);">🚀 Induction Day</div>
         </div>
     </div>
 </div>
 
 <!-- Slide 2: Welcome (Ice Breaker) -->
 <div class="slide-container">
-    <!-- Decor -->
     <div class="decor-stripe" style="top: 50px; right: -50px; background: var(--aiesec-yellow);"></div>
     
     <div class="content-area">
         <div class="two-column">
             <div>
-                <h2>Welcome to the Fam! 👋</h2>
+                <h2>Welcome to the Fam! <span class="emoji">👋</span></h2>
                 <p>Selamat datang di SGD! Anggap ini rumah baru kalian.</p>
                 <p>Di sini kita bakal belajar bareng, tumbuh bareng, dan bikin impact bareng. <span class="handwritten" style="font-size: 24px; color: var(--aiesec-blue);">No pressure, just progress!</span></p>
                 <br>
-                <div class="card" style="background: #f0f9ff; border: none; border-left: 5px solid var(--aiesec-blue);">
-                    <p style="font-weight: bold; color: var(--aiesec-blue); margin-bottom: 10px;">✨ Culture Check:</p>
+                <div class="card glass-card" style="background: rgba(240, 249, 255, 0.9); border-left: 5px solid var(--aiesec-blue);">
+                    <p style="font-weight: bold; color: var(--aiesec-blue); margin-bottom: 10px;"><span class="emoji">✨</span> Culture Check:</p>
                     <ul style="margin-left: 20px; list-style: none;">
                         <li>✅ <strong>Open Minded</strong> (Terbuka sama ide gila)</li>
                         <li>✅ <strong>Supportive</strong> (Saling bantu, no julid)</li>
@@ -208,17 +1288,17 @@
                 <img src="fam.jpeg" alt="AIESEC Family">
             </div>
             <div>
-                <h2>The Heart of Sustainability ❤️</h2>
+                <h2>The Heart of Sustainability <span class="emoji">❤️</span></h2>
                 <p><strong>Business Development (BD)</strong> itu ibarat "Jantung"-nya AIESEC.</p>
                 <p>Tugas kita simple: Nyari "bahan bakar" biar organisasi tetep jalan.</p>
                 <br>
-                <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="card">
+                <div class="grid-3" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card tooltip" data-tooltip="Fresh Money = Uang tunai langsung!">
                         <div class="icon-box"><i class="fa-solid fa-money-bill-wave"></i></div>
                         <h3>Financial</h3>
                         <p style="font-size: 16px;">Cuan / Fresh Money buat operasional.</p>
                     </div>
-                    <div class="card">
+                    <div class="card tooltip" data-tooltip="In-Kind = Support non-cash!">
                         <div class="icon-box" style="color: var(--aiesec-teal);"><i class="fa-solid fa-gift"></i></div>
                         <h3>In-Kind</h3>
                         <p style="font-size: 16px;">Barang/Jasa (Venue gratis, Snack, dll).</p>
@@ -235,13 +1315,13 @@
     <div class="content-area">
         <div class="two-column">
             <div>
-                <h2>So, SGD = GEP Support 🌏</h2>
+                <h2>So, SGD = GEP Support <span class="emoji">🌏</span></h2>
                 <p style="font-size: 24px;">Di slide LCVP tertulis: <strong>SGD = GEP</strong>.</p>
                 <p>Kita adalah "Support System" buat departemen ELD (Exchange Operasional). Kita handle GEP Sales (Global Exchange Product)</p>
                 <br>
-                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                    <p>🎯 <strong>Main Mission:</strong></p>
-                    <p>Cari partner / startupbuat support program internasional <strong>IGV (Incoming)</strong> atau <strong>OGX (Outgoing)</strong>. Biar makin banyak 'bule' yang dateng dan member kita yang berangkat!</p>
+                <div class="glass-card" style="padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <p><span class="emoji">🎯</span> <strong>Main Mission:</strong></p>
+                    <p>Cari partner / startup buat support program internasional <strong>IGV (Incoming)</strong> atau <strong>OGX (Outgoing)</strong>. Biar makin banyak 'bule' yang dateng dan member kita yang berangkat!</p>
                 </div>
             </div>
             <div class="image-wrapper">
@@ -251,18 +1331,18 @@
     </div>
 </div>
 
-<!-- Slide 5: MoS & KPI Table -->
+<!-- Slide 5: MoS & KPI Table - FIXED -->
 <div class="slide-container">
     <div class="decor-stripe" style="top: 0; left: 50%; width: 100px; height: 10px; background: var(--aiesec-blue);"></div>
     <div class="content-area">
-        <h2>MoS & KPI: Scoreboard Kita 📊</h2>
+        <h2>MoS & KPI: Scoreboard Kita <span class="emoji">📊</span></h2>
         <p>Gimana caranya kita tau kalau kita berhasil? Ini skor-nya:</p>
         
         <table style="margin-top: 30px;">
             <thead>
                 <tr>
-                    <th width="30%">Measurement</th>
-                    <th width="70%">Definition</th>
+                    <th>Measurement</th>
+                    <th>Definition</th>
                 </tr>
             </thead>
             <tbody>
@@ -291,7 +1371,7 @@
 <div class="slide-container">
     <div class="decor-blob blob-yellow" style="right: -100px; bottom: -100px; width: 300px; height: 300px;"></div>
     <div class="content-area">
-        <h2>Minimums of the Role (Do's) ✅</h2>
+        <h2>Minimums of the Role (Do's) <span class="emoji">✅</span></h2>
         <div class="grid-3">
             <div class="card">
                 <div class="icon-box"><i class="fa-solid fa-chess-knight"></i></div>
@@ -308,35 +1388,34 @@
                 <h3>Goal Setting</h3>
                 <p>Set target revenue & eksekusi sales flow dari awal sampe deal.</p>
             </div>
-            <!-- Row 2 implied or 3 items focused -->
         </div>
         <p style="margin-top: 30px; text-align: center; color: #888;">+ LC Cost Reduction & Executing Sales Flow!</p>
     </div>
 </div>
 
-<!-- Slide 7: AIESEC in UMM WIGs -->
-<div class="slide-container">
+<!-- Slide 7: AIESEC in UMM WIGs - ANIMASI FIXED -->
+<div class="slide-container" id="wigs-slide">
     <div class="decor-dots" style="top: 20px; right: 20px;"></div>
     <div class="content-area">
         <div style="text-align: center; margin-bottom: 40px;">
             <span class="handwritten">Big Dreams!</span>
-            <h2>AIESEC UMM: Wildly Important Goals 🚀</h2>
+            <h2>AIESEC UMM: Wildly Important Goals <span class="emoji">🚀</span></h2>
             <p>Visi besar LC kita sampai <strong>31 Januari 2027</strong></p>
         </div>
         
         <div class="grid-3" style="text-align: center;">
-            <div class="card" style="border: none; background: #f8faff;">
-                <div class="big-number">37</div>
+            <div class="card stat-card" style="background: #f8faff;">
+                <div class="big-number count-up" data-target="37">0</div>
                 <div class="number-label">Exchange Growth</div>
                 <p style="margin-top: 10px;">Naik dari 16 <i class="fa-solid fa-arrow-right"></i> 37 APD</p>
             </div>
-            <div class="card" style="border: none; background: #eafff6;">
-                <div class="big-number" style="color: var(--aiesec-teal);">>3</div>
+            <div class="card stat-card" style="background: #eafff6;">
+                <div class="big-number count-up" style="color: var(--aiesec-teal);" data-target="3">>0</div>
                 <div class="number-label">Cash Reserve</div>
                 <p style="margin-top: 10px;">Naik dari 1.32 <i class="fa-solid fa-arrow-right"></i> >3.0 Bulan</p>
             </div>
-            <div class="card" style="border: none; background: #fff5f5;">
-                <div class="big-number" style="color: var(--aiesec-yellow);">4</div>
+            <div class="card stat-card pulse" style="background: #fff5f5;">
+                <div class="big-number count-up" style="color: var(--aiesec-yellow);" data-target="4">0</div>
                 <div class="number-label">Collaborations</div>
                 <p style="margin-top: 10px;">Naik dari 0 <i class="fa-solid fa-arrow-right"></i> 4 Events</p>
             </div>
@@ -345,22 +1424,22 @@
 </div>
 
 <!-- Slide 8: Our Strategy (How to Win) -->
-<div class="slide-container">
+<div class="slide-container" id="strategy">
     <div class="content-area">
-        <h2>Gimana Cara Kita Menang Target? 🧠</h2>
+        <h2>Gimana Cara Kita Menang Target? <span class="emoji">🧠</span></h2>
         <div class="grid-3">
             <div class="card">
-                <div style="font-size: 40px; margin-bottom: 15px;">🔌</div>
+                <div style="font-size: 40px; margin-bottom: 15px;"><span class="emoji">🔌</span></div>
                 <h3>1. Exchange Enablement</h3>
                 <p>Support operasional lewat revenue & partners yang tepat sasaran.</p>
             </div>
             <div class="card">
-                <div style="font-size: 40px; margin-bottom: 15px;">💰</div>
+                <div style="font-size: 40px; margin-bottom: 15px;"><span class="emoji">💰</span></div>
                 <h3>2. Cash First</h3>
                 <p>Prioritaskan cash inflow yang <strong>predictable</strong>. Cari duit yang pasti-pasti aja.</p>
             </div>
             <div class="card">
-                <div style="font-size: 40px; margin-bottom: 15px;">🤝</div>
+                <div style="font-size: 40px; margin-bottom: 15px;"><span class="emoji">🤝</span></div>
                 <h3>3. Long-term Assets</h3>
                 <p>Partner lama di-maintain biar awet. Jadi aset strategis kita.</p>
             </div>
@@ -372,50 +1451,50 @@
 </div>
 
 <!-- Slide 9: The Money Talk -->
-<div class="slide-container">
+<div class="slide-container" id="target">
     <div class="decor-blob blob-teal" style="top: -100px; right: -100px; width: 400px; height: 400px;"></div>
     <div class="content-area">
         <div class="two-column">
             <div>
-                <h2>The Money Talk 💸</h2>
+                <h2>The Money Talk <span class="emoji">💸</span></h2>
                 <p>Target BD satu term ini totalnya <strong>30 Juta</strong>.</p>
                 <div style="margin-top: 30px;">
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">1</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">1</div>
                         <p>Dibagi 3 Functional: SGD, SYD, SBD.</p>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">2</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">2</div>
                         <p>SGD kebagian target: <strong>10 Juta</strong>.</p>
                     </div>
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
-                        <div style="width: 50px; height: 50px; background: var(--aiesec-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold;">3</div>
+                        <div style="width: 50px; height: 50px; background: var(--aiesec-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 20px; font-weight: bold; flex-shrink: 0;">3</div>
                         <p>Waktu Efektif: <strong>8 Bulan</strong> (Maret - Nov).</p>
                     </div>
                 </div>
             </div>
-             <div class="card" style="text-align: center; justify-content: center; display: flex; flex-direction: column; background: var(--aiesec-blue); color: white; border: none;">
-                <p style="font-size: 18px; text-transform: uppercase; color: rgba(255,255,255,0.7);">Target Per Bulan</p>
-                <div class="big-number" style="color: white;">1.25 JT</div>
+             <div class="card pulse" style="text-align: center; justify-content: center; display: flex; flex-direction: column; background: linear-gradient(135deg, var(--aiesec-blue), var(--aiesec-teal)); color: white; border: none; box-shadow: 0 20px 50px rgba(3, 126, 243, 0.4);">
+                <p style="font-size: 18px; text-transform: uppercase; color: rgba(255,255,255,0.9);">Target Per Bulan</p>
+                <div class="big-number" style="color: white; -webkit-text-fill-color: white;">1.25 JT</div>
                 <p style="color: white;">Per Functional</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Slide 10: Why 8 Months? -->
+<!-- Slide 10: Why 8 Months? - EYE-CATCHING REDESIGN -->
 <div class="slide-container" style="background-color: var(--aiesec-dark-blue); color: white;">
     <div class="decor-dots" style="opacity: 0.1; top: 50px; left: 50px;"></div>
     <div class="content-area" style="text-align: center;">
         <span class="handwritten" style="color: var(--aiesec-teal);">Important info!</span>
-        <h2 style="color: white; font-size: 60px; margin-top: 10px;">Wait, kenapa cuma 8 Bulan? 🤔</h2>
+        <h2 style="color: white; font-size: 60px; margin-top: 10px;">Wait, kenapa cuma 8 Bulan? <span class="emoji">🤔</span></h2>
         <div style="width: 100px; height: 6px; background: var(--aiesec-teal); margin: 0 auto 30px; border-radius: 10px;"></div>
         <p style="color: rgba(255,255,255,0.9); font-size: 28px; max-width: 900px; margin: 0 auto;">
             Soalnya bulan <strong>Desember - Januari</strong> itu perusahaan biasanya <strong>"Tutup Buku"</strong>.
         </p>
         <br>
-        <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; max-width: 800px; margin: 30px auto;">
-            <p style="color: rgba(255,255,255,0.8); font-size: 22px;">Mereka nggak bakal mau diajak partnership baru karena lagi ribet laporan akhir tahun. Jadi kita harus genjot maksimal di 8 bulan produktif!</p>
+        <div class="important-info-box">
+            <p>Mereka nggak bakal mau diajak partnership baru karena lagi ribet laporan akhir tahun. Jadi kita harus genjot maksimal di 8 bulan produktif!</p>
         </div>
     </div>
 </div>
@@ -428,8 +1507,8 @@
                 <h2>Target: 1.25 Juta / Bulan</h2>
                 <p>Angka ini dibagi ke 3 orang anggota kita.</p>
                 <br>
-                <div class="card" style="background: #fdf2f2; border: none; border-left: 5px solid var(--aiesec-yellow);">
-                    <h3>🧠 The Mindset:</h3>
+                <div class="card" style="background: linear-gradient(180deg, var(--aiesec-yellow) 0%, var(--aiesec-yellow) 6px, #fdf2f2 6px, #fdf2f2 100%); border-left: 5px solid var(--aiesec-yellow);">
+                    <h3><span class="emoji">🧠</span> The Mindset:</h3>
                     <p style="margin-top: 10px;">Inget ya, ini <strong>"KALO BISA"</strong>, bukan wajib mati-matian.</p>
                     <p style="margin-top: 10px;">Ini target aspirasi biar kita semangat. Kalau nggak nyampe? Gapapa, yang penting <em>effort</em>-nya udah maksimal. <span class="handwritten" style="font-size: 24px;">Santai tapi progresif!</span></p>
                 </div>
@@ -442,25 +1521,25 @@
 </div>
 
 <!-- Slide 12: Role Division -->
-<div class="slide-container">
+<div class="slide-container" id="roles">
     <div class="decor-blob blob-blue" style="bottom: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; border-radius: 50% 50% 0 0;"></div>
     <div class="content-area">
-        <h2 style="text-align: center;">Pembagian Tugas Tim SGD 🤝</h2>
+        <h2 style="text-align: center;">Pembagian Tugas Tim SGD <span class="emoji">🤝</span></h2>
         <p style="text-align: center; margin-bottom: 40px;">Biar kerjanya fokus, kita bagi 3 role utama:</p>
         
         <div class="grid-3">
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 50px; margin-bottom: 20px;">🍱</div>
+            <div class="card tooltip" data-tooltip="F&B Partner = Catering, Snacks, Beverages">
+                <div style="font-size: 50px; margin-bottom: 20px;"><span class="emoji">🍱</span></div>
                 <h3>1. Konsumsi</h3>
                 <p>Cari partner F&B (Makan/Minum). Catering, Snack Box, Air Mineral.</p>
             </div>
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 50px; margin-bottom: 20px;">🚌</div>
+            <div class="card tooltip" data-tooltip="Transport & Accommodation Partner">
+                <div style="font-size: 50px; margin-bottom: 20px;"><span class="emoji">🚌</span></div>
                 <h3>2. Trans & Acc</h3>
                 <p>Cari partner Travel, Bus, atau Guest House/Hotel buat Bule.</p>
             </div>
-            <div class="card" style="text-align: center;">
-                <div style="font-size: 50px; margin-bottom: 20px;">🏢</div>
+            <div class="card tooltip" data-tooltip="Event Space Partner">
+                <div style="font-size: 50px; margin-bottom: 20px;"><span class="emoji">🏢</span></div>
                 <h3>3. Venue</h3>
                 <p>Cari tempat gratisan/diskon buat acara AIESEC (Meeting, Seminar).</p>
             </div>
@@ -477,14 +1556,14 @@
             </div>
             <div>
                 <span class="handwritten">Secret Weapon #1</span>
-                <h2>AIESEC as a Company 👔</h2>
+                <h2>AIESEC as a Company <span class="emoji">👔</span></h2>
                 <p>Gimana cara dapet partner?</p>
                 <div style="margin-top: 20px;">
-                    <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                    <div class="card" style="margin-bottom: 20px;">
                         <h4><i class="fa-solid fa-briefcase" style="color: var(--aiesec-blue);"></i> Be Professional</h4>
                         <p style="font-size: 16px;">Posisikan diri kita sebagai partner bisnis yang setara, bukan mahasiswa magang.</p>
                     </div>
-                    <div class="card" style="padding: 20px; border-left-color: var(--aiesec-yellow);">
+                    <div class="card">
                         <h4><i class="fa-solid fa-ban" style="color: var(--aiesec-yellow);"></i> Not Charity</h4>
                         <p style="font-size: 16px;">Kita bukan "minta sumbangan". Kita jual VALUE yang menguntungkan mereka!</p>
                     </div>
@@ -501,7 +1580,7 @@
         <div class="two-column">
             <div>
                 <span class="handwritten">Secret Weapon #2</span>
-                <h2>Highlight the "International Exposure" 🌍</h2>
+                <h2>Highlight the "International Exposure" <span class="emoji">🌍</span></h2>
                 <p>Ini senjata rahasia kita!</p>
                 <br>
                 <div class="card">
@@ -522,7 +1601,7 @@
 <!-- Slide 15: Strategy 3 - USP -->
 <div class="slide-container">
     <div class="content-area">
-        <h2>Strategy #3: The Secret Sauce (USP) 🌶️</h2>
+        <h2>Strategy #3: The Secret Sauce (USP) <span class="emoji">🌶️</span></h2>
         <div class="two-column">
             <div class="card">
                 <div class="icon-box"><i class="fa-solid fa-star"></i></div>
@@ -533,7 +1612,7 @@
                     <li>🎓 Akses ke ribuan mahasiswa UMM (Market Gen-Z!).</li>
                 </ul>
             </div>
-            <div class="card" style="border-left-color: var(--aiesec-teal);">
+            <div class="card">
                 <div class="icon-box" style="color: var(--aiesec-teal);"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
                 <h3>Market Research</h3>
                 <p>Penting buat tau <strong>Profit Sharing</strong>.</p>
@@ -544,21 +1623,253 @@
 </div>
 
 <!-- Slide 16: Closing & Q&A -->
-<div class="slide-container" style="background: white; justify-content: center; align-items: center; text-align: center;">
+<div class="slide-container" id="closing" style="background: white; justify-content: center; align-items: center; text-align: center;">
     <div class="decor-blob blob-blue" style="width: 800px; height: 800px; opacity: 0.05;"></div>
     <div class="content-area" style="z-index: 2; align-items: center;">
-        <div class="image-wrapper" style="height: 300px; width: 500px; margin-bottom: 30px; border-radius: 20px;">
+        <div class="image-wrapper" style="max-width: 500px; margin: 0 auto 30px; border-radius: 20px;">
              <img src="lgd.jpeg" alt="LGD Team">
         </div>
-        <h1>Ada Pertanyaan, Guys? 🤔</h1>
+        <h1>Ada Pertanyaan, Guys? <span class="emoji">🤔</span></h1>
         <p>Nggak usah tegang, kita belajar bareng-bareng di sini.</p>
         <p style="font-size: 24px; font-weight: bold; color: var(--aiesec-blue); margin-top: 20px;">Let's make Strategic Global Development Great!</p>
         
         <div style="margin-top: 40px;">
-            <a href="#" style="background: var(--aiesec-blue); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 20px; box-shadow: 0 10px 20px rgba(3, 126, 243, 0.3);">Let's Start! 🚀</a>
+            <a href="#welcome" class="btn-primary shine"><span>Let's Start! 🚀</span></a>
         </div>
     </div>
 </div>
+
+<script>
+// ==================== LOADING SCREEN ====================
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        document.getElementById('loading-screen').classList.add('hidden');
+        document.body.classList.add('loaded');
+        
+        setTimeout(function() {
+            const firstSlide = document.querySelector('.slide-container');
+            if (firstSlide) {
+                firstSlide.classList.add('animate');
+            }
+        }, 100);
+    }, 1500);
+});
+
+// ==================== NUMBER COUNTING ANIMATION - REVISI ====================
+let lastScrollPosition = 0;
+let wigsSlideAnimated = false;
+
+function animateCounter(element) {
+    const target = parseInt(element.getAttribute('data-target'));
+    const duration = 2000;
+    const increment = target / (duration / 16);
+    let current = 0;
+    
+    // Reset dulu ke 0
+    element.textContent = element.textContent.includes('>') ? '>0' : '0';
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = element.textContent.includes('>') ? '>' + target : target;
+            clearInterval(timer);
+        } else {
+            element.textContent = element.textContent.includes('>') ? '>' + Math.floor(current) : Math.floor(current);
+        }
+    }, 16);
+}
+
+function resetCounters() {
+    const counters = document.querySelectorAll('.count-up');
+    counters.forEach(counter => {
+        counter.textContent = counter.textContent.includes('>') ? '>0' : '0';
+    });
+}
+
+function checkWigsSlideAnimation() {
+    const wigsSlide = document.getElementById('wigs-slide');
+    if (!wigsSlide) return;
+    
+    const rect = wigsSlide.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    const currentScrollPosition = window.scrollY;
+    
+    // Check kalau slide visible dan scroll dari atas (scroll down)
+    const isVisible = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3;
+    const isScrollingDown = currentScrollPosition > lastScrollPosition;
+    
+    if (isVisible && isScrollingDown && !wigsSlideAnimated) {
+        wigsSlideAnimated = true;
+        const counters = wigsSlide.querySelectorAll('.count-up');
+        counters.forEach(counter => animateCounter(counter));
+    }
+    
+    // Reset flag kalau user scroll ke atas melewati slide (balik ke slide sebelumnya)
+    if (rect.bottom < 0 && !isScrollingDown) {
+        wigsSlideAnimated = false;
+        resetCounters();
+    }
+    
+    lastScrollPosition = currentScrollPosition;
+}
+
+// Jalankan check setiap scroll
+window.addEventListener('scroll', checkWigsSlideAnimation);
+
+// ==================== SMOOTH SCROLL ANIMATIONS ====================
+const observerOptions = {
+    threshold: 0.2,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.slide-container').forEach(slide => {
+    observer.observe(slide);
+});
+
+// ==================== PARALLAX EFFECT FOR DECORATIVE ELEMENTS ====================
+let ticking = false;
+
+window.addEventListener('scroll', function() {
+    if (!ticking) {
+        window.requestAnimationFrame(function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.decor-blob');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = (index + 1) * 0.1;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+            
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+// ==================== PROGRESS BAR & SLIDE COUNTER ====================
+const slides = document.querySelectorAll('.slide-container');
+const totalSlides = slides.length;
+const progressBar = document.getElementById('progress-bar');
+const slideCounterCurrent = document.querySelector('#slide-counter .current');
+const slideCounterTotal = document.querySelector('#slide-counter .total');
+
+slideCounterTotal.textContent = totalSlides;
+
+window.addEventListener('scroll', function() {
+    updateProgress();
+    toggleBackToTop();
+});
+
+function updateProgress() {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight - windowHeight;
+    const scrolled = window.scrollY;
+    const progress = (scrolled / documentHeight) * 100;
+    
+    progressBar.style.width = progress + '%';
+    
+    let currentSlideIndex = 1;
+    slides.forEach((slide, index) => {
+        const rect = slide.getBoundingClientRect();
+        const slideMiddle = rect.top + (rect.height / 2);
+        
+        if (slideMiddle < windowHeight / 2 && slideMiddle > -rect.height / 2) {
+            currentSlideIndex = index + 1;
+        }
+    });
+    
+    slideCounterCurrent.textContent = currentSlideIndex;
+}
+
+// ==================== BACK TO TOP BUTTON ====================
+const backToTopBtn = document.getElementById('back-to-top');
+
+function toggleBackToTop() {
+    if (window.scrollY > 500) {
+        backToTopBtn.classList.add('visible');
+    } else {
+        backToTopBtn.classList.remove('visible');
+    }
+}
+
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// ==================== NAVBAR MENU ====================
+function toggleMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.toggle('active');
+}
+
+function closeMenu() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.classList.remove('active');
+}
+
+document.addEventListener('click', function(event) {
+    const navbar = document.querySelector('.navbar');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (!navbar.contains(event.target)) {
+        navLinks.classList.remove('active');
+    }
+});
+
+// ==================== CONFETTI ANIMATION (FINAL SLIDE) ====================
+function createConfetti() {
+    const closingSlide = document.getElementById('closing');
+    if (!closingSlide) return;
+    
+    const confettiObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('confetti-launched')) {
+                entry.target.classList.add('confetti-launched');
+                launchConfetti(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    confettiObserver.observe(closingSlide);
+}
+
+function launchConfetti(container) {
+    const colors = ['#037ef3', '#4be8e8', '#f85a40', '#0a2f5e'];
+    const confettiCount = 50;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            container.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 5000);
+        }, i * 50);
+    }
+}
+
+// ==================== INITIAL SETUP ====================
+window.addEventListener('load', function() {
+    updateProgress();
+    toggleBackToTop();
+    createConfetti();
+});
+</script>
 
 </body>
 </html>
