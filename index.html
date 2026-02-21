@@ -1662,7 +1662,7 @@
                     <li><a href="#strategy" onclick="closeMenu()">Strategy</a></li>
                 </ul>
             </li>
-            <li><a href="introduction.html">Introduction</a></li>
+            <li><a href="javascript:void(0)" onclick="showIntroduction()">Introduction</a></li>
         </ul>
     </nav>
 
@@ -1679,7 +1679,7 @@
         
         <div style="margin-top: 40px; display: flex; gap: 20px; flex-wrap: wrap;">
             <div class="badge shine" style="background: var(--aiesec-blue); color: white;">💙 Business Development</div>
-            <a href="introduction.html" class="badge shine" style="background: var(--aiesec-grey); color: var(--aiesec-dark-blue); text-decoration: none; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚀 Introduction</a>
+            <a href="javascript:void(0)" onclick="showIntroduction()" class="badge shine" style="background: var(--aiesec-grey); color: var(--aiesec-dark-blue); text-decoration: none; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚀 Introduction</a>
         </div>
     </div>
 </div>
@@ -2278,6 +2278,12 @@ function toggleSubmenu(event, element) {
         event.stopPropagation();
         element.classList.toggle('active');
     }
+}
+
+// ==================== INTRODUCTION PAGE ====================
+function showIntroduction() {
+    // Open introduction page in new window
+    window.open('introduction.html', '_blank');
 }
 
 document.addEventListener('click', function(event) {
