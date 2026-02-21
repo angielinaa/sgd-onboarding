@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction - SGD Team AIESEC in UMM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --aiesec-blue: #0080F5;
+            --aiesec-teal: #00C16E;
+            --aiesec-orange: #F85A40;
+            --aiesec-yellow: #FFC845;
+            --aiesec-dark-blue: #0C2340;
+            --aiesec-grey: #E6E6E6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #0080F5;
+            min-height: 100vh;
+            padding-top: 80px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ========== SCROLL ANIMATIONS ========== */
+        .slide-container {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            position: relative;
+            z-index: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .slide-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== DECORATIVE SHAPES INSIDE SLIDES ========== */
+        .slide-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            pointer-events: none;
+        }
+
+        .slide-container .slide-shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--aiesec-blue);
+            top: -100px;
+            right: -80px;
+            animation: floatShape 15s infinite ease-in-out;
+        }
+
+        .slide-container .slide-shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--aiesec-teal);
+            bottom: -50px;
+            left: -60px;
+            animation: floatShape 18s infinite ease-in-out reverse;
+        }
+
+        .slide-container .slide-shape-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--aiesec-orange);
+            top: 50%;
+            right: 5%;
+            animation: floatShape 20s infinite ease-in-out;
+        }
+
+        .slide-container .slide-shape-4 {
+            width: 180px;
+            height: 180px;
+            background: var(--aiesec-yellow);
+            bottom: 20%;
+            left: 10%;
+            animation: floatShape 22s infinite ease-in-out reverse;
+        }
+
+        @keyframes floatShape {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* Pop-up animations for elements */
+        .pop-up {
+            animation: popUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.6s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--aiesec-dark-blue);
+            padding: 15px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .navbar .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .navbar-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .home-btn {
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-btn:hover {
+            background: #0066cc;
+            transform: translateY(-2px);
+        }
+
+        .logout-btn {
+            background: var(--aiesec-orange);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #d94a30;
+            transform: translateY(-2px);
+        }
+
+        /* Login Modal */
+        #login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0080F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        #login-modal.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: popUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .login-logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .login-box h2 {
+            color: var(--aiesec-dark-blue);
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .login-box .subtitle {
+            color: #666;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--aiesec-blue);
+            font-size: 18px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            margin: 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: var(--aiesec-blue);
+            box-shadow: 0 0 0 3px rgba(0, 128, 245, 0.1);
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 25px;
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-box button:hover {
+            background: #0066cc;
+            transform: translateY(-2px);
+        }
+
+        .error-msg {
+            color: white;
+            background: var(--aiesec-orange);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Slide Content Wrapper */
+        .slide-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide-container h2 {
+            color: var(--aiesec-dark-blue);
+            margin-bottom: 20px;
+            font-size: 36px;
+        }
+
+        .slide-container h3 {
+            color: var(--aiesec-blue);
+            margin: 20px 0 10px 0;
+            font-size: 24px;
+        }
+
+        /* Welcome Slide */
+        .welcome-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-content h1 {
+            font-size: 56px;
+            color: var(--aiesec-blue);
+            margin-bottom: 20px;
+        }
+
+        .welcome-content p {
+            font-size: 22px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .welcome-icon {
+            font-size: 80px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        /* Check-in Box */
+        .checkin-box {
+            background: linear-gradient(135deg, var(--aiesec-blue), #0066cc);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 128, 245, 0.3);
+        }
+
+        .checkin-box h3 {
+            margin: 0 0 15px 0;
+            color: white !important;
+        }
+
+        .checkin-question {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .checkin-question::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .checkin-box textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            margin-top: 15px;
+            resize: vertical;
+            background: white;
+            color: #333;
+        }
+
+        .checkin-box button {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: white;
+            color: var(--aiesec-blue);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .checkin-box button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .admin-only {
+            display: none;
+        }
+
+        .checkin-question-display {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .checkin-responses {
+            margin-top: 20px;
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .checkin-item {
+            background: white;
+            color: var(--aiesec-dark-blue);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            animation: slideInLeft 0.4s ease;
+            gap: 10px;
+        }
+
+        .checkin-item .content {
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.5;
+            word-break: break-word;
+            max-width: calc(100% - 50px);
+            overflow: hidden;
+        }
+
+        .checkin-item strong {
+            color: var(--aiesec-blue);
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .checkin-item .content span {
+            display: block;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .checkin-item .delete-btn {
+            background: var(--aiesec-orange);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkin-item .delete-btn:hover {
+            transform: scale(1.1);
+            background: #d94a30;
+        }
+
+        /* Team Grid */
+        .team-structure {
+            margin-top: 40px;
+        }
+
+        .team-leader {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .team-leader .team-member {
+            max-width: 450px;
+            width: 100%;
+            padding: 50px 40px;
+        }
+
+        .team-staff {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .team-member {
+            background: var(--aiesec-blue);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .team-member img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover img {
+            transform: scale(1.05);
+        }
+
+        .team-member h3 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 26px;
+        }
+
+        .team-member p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--aiesec-blue);
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateX(5px);
+        }
+
+        .profile-card h3 {
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .profile-field {
+            margin-bottom: 30px;
+        }
+
+        .profile-field label {
+            display: block;
+            font-weight: 700;
+            color: var(--aiesec-dark-blue);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .profile-field label i {
+            margin-right: 10px;
+            color: var(--aiesec-blue);
+        }
+
+        .profile-card textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 18px;
+            border: 2px solid var(--aiesec-grey);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .profile-card textarea:focus {
+            outline: none;
+            border-color: var(--aiesec-blue);
+            box-shadow: 0 0 0 3px rgba(0, 128, 245, 0.1);
+            transform: scale(1.01);
+        }
+
+        .profile-card button {
+            padding: 14px 35px;
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-card button:hover {
+            background: #0066cc;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Expectation Box */
+        .expectation-input-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--aiesec-blue);
+            transition: all 0.3s ease;
+        }
+
+        .expectation-input-box:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .expectation-input-box textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid var(--aiesec-grey);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .expectation-input-box textarea:focus {
+            outline: none;
+            border-color: var(--aiesec-blue);
+            box-shadow: 0 0 0 3px rgba(0, 128, 245, 0.1);
+        }
+
+        .expectation-input-box button {
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expectation-input-box button:hover {
+            background: #0066cc;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .expectation-list {
+            margin-top: 30px;
+        }
+
+        .expectation-item {
+            background: white;
+            padding: 20px 25px;
+            margin: 15px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-left: 4px solid var(--aiesec-blue);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            animation: slideInRight 0.4s ease;
+            transition: all 0.3s ease;
+            gap: 10px;
+        }
+
+        .expectation-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+            transform: translateX(5px);
+        }
+
+        .expectation-item .content {
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.6;
+            word-break: break-word;
+            max-width: calc(100% - 50px);
+            overflow: hidden;
+        }
+
+        .expectation-item strong {
+            color: var(--aiesec-blue);
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .expectation-item .content span {
+            display: block;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .expectation-item button {
+            background: var(--aiesec-orange);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .expectation-item button:hover {
+            transform: scale(1.1);
+            background: #d94a30;
+        }
+
+        /* Table for Staff Expectations */
+        .staff-expectations-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 20px;
+            margin-top: 30px;
+        }
+
+        .staff-expectations-table td {
+            padding: 0;
+            vertical-align: top;
+        }
+
+        .staff-expectations-table .staff-name {
+            font-weight: 800;
+            color: white;
+            font-size: 20px;
+            padding: 30px 25px;
+            background: var(--aiesec-blue);
+            border-radius: 10px 0 0 10px;
+            width: 180px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 128, 245, 0.2);
+        }
+
+        .staff-expectations-table .staff-expectation {
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+            padding: 25px 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .staff-expectations-table tr:hover .staff-expectation {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transform: translateX(5px);
+        }
+
+        .staff-expectations-table textarea {
+            width: 100%;
+            min-height: 140px;
+            border: 2px solid var(--aiesec-grey);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .staff-expectations-table textarea:focus {
+            outline: none;
+            border-color: var(--aiesec-blue);
+            box-shadow: 0 0 0 3px rgba(0, 128, 245, 0.1);
+        }
+
+        .save-expectations-btn {
+            padding: 14px 35px;
+            background: var(--aiesec-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .save-expectations-btn:hover {
+            background: #0066cc;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .clear-expectations-btn {
+            padding: 14px 35px;
+            background: var(--aiesec-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 25px;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-expectations-btn:hover {
+            background: #d94a30;
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* User Badge */
+        .user-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            background: var(--aiesec-blue);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .user-badge.admin {
+            background: var(--aiesec-orange);
+        }
+
+        /* Success Message */
+        .success-msg {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--aiesec-blue);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 10px;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 9999;
+            display: none;
+            animation: slideInRight 0.4s ease;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            .slide-container {
+                padding: 40px 30px;
+            }
+
+            .team-staff {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+                flex-wrap: wrap;
+            }
+
+            .navbar .logo {
+                font-size: 18px;
+            }
+
+            .navbar-buttons {
+                gap: 10px;
+            }
+
+            .home-btn,
+            .logout-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .slide-container {
+                padding: 30px 20px;
+                margin-bottom: 20px;
+            }
+
+            .slide-container h2 {
+                font-size: 26px;
+            }
+
+            .welcome-content h1 {
+                font-size: 36px;
+            }
+
+            .welcome-content p {
+                font-size: 18px;
+            }
+
+            .welcome-icon {
+                font-size: 60px;
+            }
+
+            .checkin-box {
+                padding: 30px 20px;
+            }
+
+            .team-staff {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .team-member {
+                padding: 30px 20px;
+            }
+
+            .team-member img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .team-member h3 {
+                font-size: 22px;
+            }
+
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            .profile-card h3 {
+                font-size: 24px;
+            }
+
+            .staff-expectations-table {
+                border-spacing: 0 15px;
+            }
+
+            .staff-expectations-table .staff-name {
+                width: 80px;
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+
+            .staff-expectations-table .staff-expectation {
+                padding: 20px 15px;
+            }
+
+            .login-box {
+                padding: 40px 25px;
+            }
+
+            .login-logo {
+                font-size: 60px;
+            }
+
+            .login-box h2 {
+                font-size: 26px;
+            }
+
+            .expectation-input-box {
+                padding: 20px;
+            }
+
+            .success-msg {
+                right: 10px;
+                left: 10px;
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+
+            .clear-expectations-btn {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .navbar {
+                padding: 12px 5%;
+            }
+
+            .navbar .logo {
+                font-size: 16px;
+            }
+
+            .user-badge {
+                display: block;
+                margin: 5px 0 0 0;
+                width: fit-content;
+            }
+
+            .navbar-buttons {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .home-btn,
+            .logout-btn {
+                padding: 8px 15px;
+                font-size: 13px;
+                width: 100%;
+            }
+
+            .slide-container {
+                padding: 25px 15px;
+            }
+
+            .slide-container h2 {
+                font-size: 22px;
+            }
+
+            .welcome-content h1 {
+                font-size: 28px;
+            }
+
+            .welcome-content p {
+                font-size: 16px;
+            }
+
+            .checkin-box {
+                padding: 25px 15px;
+            }
+
+            .checkin-box button {
+                padding: 10px 20px;
+                font-size: 14px;
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .team-member img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .team-member h3 {
+                font-size: 20px;
+            }
+
+            .team-member p {
+                font-size: 14px;
+            }
+
+            .profile-card textarea,
+            .expectation-input-box textarea,
+            .staff-expectations-table textarea {
+                min-height: 120px;
+                font-size: 14px;
+            }
+
+            .staff-expectations-table {
+                display: block;
+            }
+
+            .staff-expectations-table tr {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            .staff-expectations-table td {
+                display: block;
+                width: 100% !important;
+            }
+
+            .staff-expectations-table .staff-name {
+                border-radius: 10px 10px 0 0;
+                padding: 15px;
+            }
+
+            .staff-expectations-table .staff-expectation {
+                border-radius: 0 0 10px 10px;
+                padding: 15px;
+            }
+
+            .save-expectations-btn,
+            .clear-expectations-btn {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Modal -->
+    <div id="login-modal">
+        <div class="login-box">
+            <div class="login-logo">🌍</div>
+            <h2>SGD Introduction</h2>
+            <p class="subtitle">Strategic Global Development - AIESEC in UMM</p>
+            
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username-input" placeholder="Username" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password-input" placeholder="Password">
+            </div>
+            
+            <button onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            
+            <p class="error-msg" id="error-msg">❌ Username atau password salah!</p>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-msg" id="success-msg">
+        ✅ Data berhasil disimpan!
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            🌟 SGD Introduction
+            <span class="user-badge" id="user-badge"></span>
+        </div>
+        <div class="navbar-buttons">
+            <a href="index.html" class="home-btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <button class="logout-btn" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" id="main-content" style="display: none;">
+
+        <!-- Slide 1: Welcome -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-1"></div>
+            <div class="slide-shape slide-shape-2"></div>
+            <div class="slide-shape slide-shape-3"></div>
+            <div class="slide-content">
+                <div class="welcome-content">
+                    <div class="welcome-icon pop-up">🎉</div>
+                    <h1 class="fade-in">Welcome to SGD!</h1>
+                    <p class="slide-in-left"><strong>Strategic Global Development</strong></p>
+                    <p class="slide-in-right" style="margin-top: 20px; font-size: 20px;">AIESEC in UMM</p>
+                    <p class="fade-in" style="font-size: 16px; margin-top: 30px; color: #999;">
+                        ✨ Let's get to know each other and set our expectations for this amazing journey! ✨
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Check-in Box -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-1"></div>
+            <div class="slide-shape slide-shape-4"></div>
+            <div class="slide-content">
+                <h2>📝 Check-in Box</h2>
+                
+                <div class="checkin-box">
+                    <h3>💭 Today's Question</h3>
+                    
+                    <!-- Admin edit question -->
+                    <div class="admin-only">
+                        <input 
+                            type="text" 
+                            class="checkin-question" 
+                            id="checkin-question-input" 
+                            placeholder="Bagaimana perasaan kalian hari ini?">
+                        <button onclick="saveCheckinQuestion()">
+                            <i class="fas fa-save"></i> Save Question
+                        </button>
+                    </div>
+                    
+                    <!-- Display question -->
+                    <div class="checkin-question-display" id="checkin-question-display">
+                        Bagaimana perasaan kalian hari ini?
+                    </div>
+                    
+                    <!-- Answer textarea -->
+                    <textarea id="checkin-text" placeholder="Tulis jawaban kamu di sini..."></textarea>
+                    <button onclick="saveCheckin()">
+                        <i class="fas fa-paper-plane"></i> Submit Check-in
+                    </button>
+                    
+                    <div class="checkin-responses" id="checkin-responses" style="display: none;">
+                        <h4 style="margin-bottom: 15px; color: white;">📋 All Check-ins:</h4>
+                        <div id="checkin-list"></div>
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                    <i class="fas fa-info-circle"></i> Admin dapat mengedit pertanyaan check-in | Tekan Enter untuk submit
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Meet Our Team -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-2"></div>
+            <div class="slide-shape slide-shape-3"></div>
+            <div class="slide-content">
+                <h2>👥 Meet Our Team</h2>
+                
+                <div class="team-structure">
+                    <!-- Leader at Top -->
+                    <div class="team-leader">
+                        <div class="team-member pop-up">
+                            <img src="enzy.png" alt="Enzy">
+                            <h3>Enzy</h3>
+                            <p>Strategic Global Development Team</p>
+                        </div>
+                    </div>
+
+                    <!-- Staff Below -->
+                    <div class="team-staff">
+                        <div class="team-member slide-in-left">
+                            <img src="bintang.png" alt="Bintang">
+                            <h3>Bintang</h3>
+                            <p>Strategic Global Development Team</p>
+                        </div>
+                        <div class="team-member pop-up" style="animation-delay: 0.2s;">
+                            <img src="sinta.png" alt="Sinta">
+                            <h3>Sinta</h3>
+                            <p>Strategic Global Development Team</p>
+                        </div>
+                        <div class="team-member slide-in-right">
+                            <img src="ale.png" alt="Ale">
+                            <h3>Ale</h3>
+                            <p>Strategic Global Development Team</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Get to Know - Enzy -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-1"></div>
+            <div class="slide-shape slide-shape-3"></div>
+            <div class="slide-content">
+                <h2>🎯 Get to Know: Enzy</h2>
+                <div class="profile-card">
+                    <h3>Profile</h3>
+                    
+                    <div class="profile-field">
+                        <label><i class="fas fa-user-circle"></i> About Me</label>
+                        <textarea id="enzy-about" placeholder="Ceritakan tentang diri kamu..."></textarea>
+                    </div>
+
+                    <div class="profile-field">
+                        <label><i class="fas fa-rocket"></i> AIESEC Journey</label>
+                        <textarea id="enzy-journey" placeholder="Ceritakan perjalanan AIESEC kamu..."></textarea>
+                    </div>
+
+                    <button onclick="saveProfile('enzy')" class="admin-only">
+                        <i class="fas fa-save"></i> Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Get to Know - Bintang -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-2"></div>
+            <div class="slide-shape slide-shape-4"></div>
+            <div class="slide-content">
+                <h2>🎯 Get to Know: Bintang</h2>
+                <div class="profile-card">
+                    <h3>Profile</h3>
+                    
+                    <div class="profile-field">
+                        <label><i class="fas fa-user-circle"></i> About Me</label>
+                        <textarea id="bintang-about" placeholder="Ceritakan tentang diri kamu..."></textarea>
+                    </div>
+
+                    <div class="profile-field">
+                        <label><i class="fas fa-rocket"></i> AIESEC Journey</label>
+                        <textarea id="bintang-journey" placeholder="Ceritakan perjalanan AIESEC kamu..."></textarea>
+                    </div>
+
+                    <button onclick="saveProfile('bintang')">
+                        <i class="fas fa-save"></i> Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Get to Know - Sinta -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-1"></div>
+            <div class="slide-shape slide-shape-2"></div>
+            <div class="slide-content">
+                <h2>🎯 Get to Know: Sinta</h2>
+                <div class="profile-card">
+                    <h3>Profile</h3>
+                    
+                    <div class="profile-field">
+                        <label><i class="fas fa-user-circle"></i> About Me</label>
+                        <textarea id="sinta-about" placeholder="Ceritakan tentang diri kamu..."></textarea>
+                    </div>
+
+                    <div class="profile-field">
+                        <label><i class="fas fa-rocket"></i> AIESEC Journey</label>
+                        <textarea id="sinta-journey" placeholder="Ceritakan perjalanan AIESEC kamu..."></textarea>
+                    </div>
+
+                    <button onclick="saveProfile('sinta')">
+                        <i class="fas fa-save"></i> Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Get to Know - Ale -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-3"></div>
+            <div class="slide-shape slide-shape-4"></div>
+            <div class="slide-content">
+                <h2>🎯 Get to Know: Ale</h2>
+                <div class="profile-card">
+                    <h3>Profile</h3>
+                    
+                    <div class="profile-field">
+                        <label><i class="fas fa-user-circle"></i> About Me</label>
+                        <textarea id="ale-about" placeholder="Ceritakan tentang diri kamu..."></textarea>
+                    </div>
+
+                    <div class="profile-field">
+                        <label><i class="fas fa-rocket"></i> AIESEC Journey</label>
+                        <textarea id="ale-journey" placeholder="Ceritakan perjalanan AIESEC kamu..."></textarea>
+                    </div>
+
+                    <button onclick="saveProfile('ale')">
+                        <i class="fas fa-save"></i> Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Set Expectation -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-1"></div>
+            <div class="slide-shape slide-shape-4"></div>
+            <div class="slide-content">
+                <h2>🎯 Set Expectation</h2>
+                <p style="font-size: 18px; color: #666; margin-bottom: 20px;">Apa yang kalian harapkan dari team ini?</p>
+                
+                <div class="expectation-input-box">
+                    <textarea id="expectation-text" placeholder="Tulis ekspektasi kamu di sini..."></textarea>
+                    <button onclick="saveExpectation()">
+                        <i class="fas fa-paper-plane"></i> Submit Expectation
+                    </button>
+                </div>
+                
+                <div class="expectation-list" id="expectation-list"></div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Expectation for Leader -->
+        <div class="slide-container">
+            <div class="slide-shape slide-shape-2"></div>
+            <div class="slide-shape slide-shape-3"></div>
+            <div class="slide-content">
+                <h2>📊 Expectation for Leader</h2>
+                <p style="font-size: 18px; color: #666; margin-bottom: 20px;">Apa yang kalian harapkan dari leader?</p>
+                
+                <table class="staff-expectations-table">
+                    <tr>
+                        <td class="staff-name">
+                            <div>Bintang</div>
+                        </td>
+                        <td class="staff-expectation">
+                            <textarea 
+                                id="exp-bintang" 
+                                placeholder="Tulis ekspektasi kamu untuk leader (bisa gunakan bullet points)&#10;• Contoh: Open dan supportive&#10;• Contoh: Clear communication&#10;• Contoh: Selalu update team"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="staff-name">
+                            <div>Sinta</div>
+                        </td>
+                        <td class="staff-expectation">
+                            <textarea 
+                                id="exp-sinta" 
+                                placeholder="Tulis ekspektasi kamu untuk leader (bisa gunakan bullet points)&#10;• Contoh: Open dan supportive&#10;• Contoh: Clear communication&#10;• Contoh: Selalu update team"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="staff-name">
+                            <div>Ale</div>
+                        </td>
+                        <td class="staff-expectation">
+                            <textarea 
+                                id="exp-ale" 
+                                placeholder="Tulis ekspektasi kamu untuk leader (bisa gunakan bullet points)&#10;• Contoh: Open dan supportive&#10;• Contoh: Clear communication&#10;• Contoh: Selalu update team"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                
+                <button class="save-expectations-btn" onclick="saveStaffExpectations()">
+                    <i class="fas fa-save"></i> Save All Expectations
+                </button>
+                <button class="clear-expectations-btn admin-only" onclick="clearAllStaffExpectations()">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 40px 20px; color: white;">
+            <p style="font-size: 18px;">✨ Made with ❤️ for SGD AIESEC in UMM ✨</p>
+            <p style="margin-top: 10px; font-size: 14px;">Strategic Global Development 2026</p>
+        </div>
+
+    </div>
+
+    <script>
+        // ==================== AUTO LOGOUT AFTER 24 HOURS ====================
+        const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        function setLoginTimestamp() {
+            const now = new Date().getTime();
+            localStorage.setItem('sgd_login_time', now);
+        }
+
+        function checkSessionExpiry() {
+            const loginTime = localStorage.getItem('sgd_login_time');
+            if (loginTime) {
+                const now = new Date().getTime();
+                const elapsed = now - parseInt(loginTime);
+                
+                if (elapsed > SESSION_DURATION) {
+                    // Session expired - auto logout
+                    alert('Session telah berakhir setelah 24 jam. Silakan login kembali.');
+                    handleLogout(true);
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        // Check session every minute
+        setInterval(checkSessionExpiry, 60000);
+
+        // ==================== SCROLL ANIMATIONS ====================
+        function initScrollAnimations() {
+            const slides = document.querySelectorAll('.slide-container');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    } else {
+                        // REMOVE 'show' class when out of view so animation triggers again!
+                        entry.target.classList.remove('show');
+                    }
+                });
+            }, observerOptions);
+
+            slides.forEach(slide => {
+                observer.observe(slide);
+            });
+        }
+
+        // ==================== AUTHENTICATION ====================
+        let currentUser = null;
+        let isAdmin = false;
+        let userDisplayName = '';
+
+        const USERS = {
+            'enzy': { password: '256', isAdmin: true, displayName: 'Enzy' },
+            'bintang': { password: '123', isAdmin: false, displayName: 'Bintang' },
+            'sinta': { password: '123', isAdmin: false, displayName: 'Sinta' },
+            'ale': { password: '123', isAdmin: false, displayName: 'Ale' }
+        };
+
+        function handleLogin() {
+            const username = document.getElementById('username-input').value.trim().toLowerCase();
+            const password = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            if (USERS[username] && USERS[username].password === password) {
+                currentUser = username;
+                isAdmin = USERS[username].isAdmin;
+                userDisplayName = USERS[username].displayName;
+                
+                // Save login data to localStorage
+                localStorage.setItem('sgd_current_user', username);
+                localStorage.setItem('sgd_is_admin', isAdmin);
+                localStorage.setItem('sgd_display_name', userDisplayName);
+                
+                setLoginTimestamp(); // Set timestamp for auto logout
+                successfulLogin();
+            } else {
+                errorMsg.style.display = 'block';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function successfulLogin() {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('main-content').style.display = 'block';
+            
+            const userBadge = document.getElementById('user-badge');
+            userBadge.textContent = userDisplayName;
+            userBadge.className = 'user-badge ' + (isAdmin ? 'admin' : '');
+            
+            const adminElements = document.querySelectorAll('.admin-only');
+            adminElements.forEach(el => {
+                el.style.display = isAdmin ? 'block' : 'none';
+            });
+            
+            loadAllData();
+            
+            // Initialize scroll animations after login
+            setTimeout(initScrollAnimations, 100);
+        }
+
+        function handleLogout(skipConfirm = false) {
+            if (skipConfirm || confirm('Yakin mau logout?')) {
+                currentUser = null;
+                isAdmin = false;
+                userDisplayName = '';
+                
+                // Clear all login data from localStorage
+                localStorage.removeItem('sgd_login_time');
+                localStorage.removeItem('sgd_current_user');
+                localStorage.removeItem('sgd_is_admin');
+                localStorage.removeItem('sgd_display_name');
+                
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('username-input').value = '';
+                document.getElementById('password-input').value = '';
+                
+                // Reset animations
+                document.querySelectorAll('.slide-container').forEach(el => {
+                    el.classList.remove('show');
+                });
+            }
+        }
+
+        // Auto login if session is valid
+        function checkAutoLogin() {
+            const savedUser = localStorage.getItem('sgd_current_user');
+            
+            if (savedUser && checkSessionExpiry()) {
+                // Session is valid, auto login
+                currentUser = savedUser;
+                isAdmin = localStorage.getItem('sgd_is_admin') === 'true';
+                userDisplayName = localStorage.getItem('sgd_display_name');
+                
+                successfulLogin();
+                return true;
+            }
+            return false;
+        }
+
+        // ==================== DATA PERSISTENCE ====================
+        function saveData(key, value) {
+            localStorage.setItem('sgd_' + key, JSON.stringify(value));
+        }
+
+        function getData(key) {
+            const data = localStorage.getItem('sgd_' + key);
+            return data ? JSON.parse(data) : null;
+        }
+
+        function showSuccessMsg() {
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 2000);
+        }
+
+        function loadAllData() {
+            const question = getData('checkin_question') || 'Bagaimana perasaan kalian hari ini?';
+            const questionInput = document.getElementById('checkin-question-input');
+            if (questionInput) {
+                questionInput.placeholder = question;
+            }
+            document.getElementById('checkin-question-display').textContent = question;
+            
+            loadCheckins();
+            loadProfile('enzy');
+            loadProfile('bintang');
+            loadProfile('sinta');
+            loadProfile('ale');
+            loadExpectations();
+            loadStaffExpectations();
+        }
+
+        // ==================== CHECK-IN ====================
+        function saveCheckinQuestion() {
+            const questionInput = document.getElementById('checkin-question-input');
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                alert('Pertanyaan tidak boleh kosong!');
+                return;
+            }
+            
+            saveData('checkin_question', question);
+            document.getElementById('checkin-question-display').textContent = question;
+            questionInput.value = '';
+            questionInput.placeholder = question;
+            showSuccessMsg();
+        }
+
+        function saveCheckin() {
+            const checkinText = document.getElementById('checkin-text').value.trim();
+            
+            if (!checkinText) {
+                alert('Tolong isi check-in terlebih dahulu!');
+                return;
+            }
+
+            const checkins = getData('checkins') || [];
+            checkins.push({
+                user: userDisplayName,
+                text: checkinText,
+                timestamp: new Date().toISOString()
+            });
+
+            saveData('checkins', checkins);
+            document.getElementById('checkin-text').value = '';
+            loadCheckins();
+            showSuccessMsg();
+        }
+
+        // ==================== INITIALIZE ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for auto login on page load FIRST
+            const isLoggedIn = checkAutoLogin();
+            
+            // If not logged in, show login modal
+            if (!isLoggedIn) {
+                document.getElementById('login-modal').classList.remove('hidden');
+            }
+            
+            // Setup event listeners
+            const checkinTextarea = document.getElementById('checkin-text');
+            if (checkinTextarea) {
+                checkinTextarea.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        saveCheckin();
+                    }
+                });
+            }
+            
+            const expectationTextarea = document.getElementById('expectation-text');
+            if (expectationTextarea) {
+                expectationTextarea.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        saveExpectation();
+                    }
+                });
+            }
+            
+            const passwordInput = document.getElementById('password-input');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleLogin();
+                    }
+                });
+            }
+        });
+
+        function loadCheckins() {
+            const checkins = getData('checkins') || [];
+            const list = document.getElementById('checkin-list');
+            const container = document.getElementById('checkin-responses');
+
+            if (checkins.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            list.innerHTML = '';
+
+            checkins.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'checkin-item';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'content';
+                
+                const strongTag = document.createElement('strong');
+                strongTag.textContent = item.user + ':';
+                contentDiv.appendChild(strongTag);
+                
+                const spanTag = document.createElement('span');
+                spanTag.textContent = item.text;
+                contentDiv.appendChild(spanTag);
+                
+                div.appendChild(contentDiv);
+                
+                if (isAdmin) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = function() { deleteCheckin(index); };
+                    div.appendChild(deleteBtn);
+                }
+                
+                list.appendChild(div);
+            });
+        }
+
+        function deleteCheckin(index) {
+            if (confirm('Hapus check-in ini?')) {
+                const checkins = getData('checkins') || [];
+                checkins.splice(index, 1);
+                saveData('checkins', checkins);
+                loadCheckins();
+            }
+        }
+
+        // ==================== PROFILES ====================
+        function saveProfile(profileId) {
+            const profile = {
+                about: document.getElementById(profileId + '-about').value,
+                journey: document.getElementById(profileId + '-journey').value
+            };
+
+            saveData('profile_' + profileId, profile);
+            showSuccessMsg();
+        }
+
+        function loadProfile(profileId) {
+            const profile = getData('profile_' + profileId);
+            if (profile) {
+                const aboutInput = document.getElementById(profileId + '-about');
+                if (aboutInput) aboutInput.value = profile.about || '';
+                
+                const journeyInput = document.getElementById(profileId + '-journey');
+                if (journeyInput) journeyInput.value = profile.journey || '';
+            }
+        }
+
+        // ==================== EXPECTATIONS ====================
+        function saveExpectation() {
+            const expectationText = document.getElementById('expectation-text').value.trim();
+            
+            if (!expectationText) {
+                alert('Tolong isi ekspektasi terlebih dahulu!');
+                return;
+            }
+
+            const expectations = getData('expectations') || [];
+            expectations.push({
+                user: userDisplayName,
+                text: expectationText,
+                timestamp: new Date().toISOString()
+            });
+
+            saveData('expectations', expectations);
+            document.getElementById('expectation-text').value = '';
+            loadExpectations();
+            showSuccessMsg();
+        }
+
+        function loadExpectations() {
+            const expectations = getData('expectations') || [];
+            const list = document.getElementById('expectation-list');
+            list.innerHTML = '';
+
+            if (expectations.length === 0) {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.style.textAlign = 'center';
+                emptyMsg.style.color = '#999';
+                emptyMsg.style.padding = '30px';
+                emptyMsg.style.fontSize = '16px';
+                emptyMsg.innerHTML = '<i class="fas fa-inbox"></i> Belum ada ekspektasi. Tulis ekspektasi pertama!';
+                list.appendChild(emptyMsg);
+                return;
+            }
+
+            expectations.forEach((exp, index) => {
+                // Skip undefined or invalid entries
+                if (!exp || !exp.user || !exp.text) {
+                    return;
+                }
+                
+                const item = document.createElement('div');
+                item.className = 'expectation-item';
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'content';
+                
+                const strongTag = document.createElement('strong');
+                strongTag.textContent = exp.user + ':';
+                contentDiv.appendChild(strongTag);
+                
+                const spanTag = document.createElement('span');
+                spanTag.textContent = exp.text;
+                contentDiv.appendChild(spanTag);
+                
+                item.appendChild(contentDiv);
+                
+                if (isAdmin) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = function() { deleteExpectation(index); };
+                    item.appendChild(deleteBtn);
+                }
+                
+                list.appendChild(item);
+            });
+        }
+
+        function deleteExpectation(index) {
+            if (confirm('Hapus expectation ini?')) {
+                const expectations = getData('expectations') || [];
+                expectations.splice(index, 1);
+                saveData('expectations', expectations);
+                loadExpectations();
+            }
+        }
+
+        // ==================== STAFF EXPECTATIONS ====================
+        function saveStaffExpectations() {
+            const expectations = {
+                bintang: document.getElementById('exp-bintang').value,
+                sinta: document.getElementById('exp-sinta').value,
+                ale: document.getElementById('exp-ale').value
+            };
+
+            saveData('staff_expectations', expectations);
+            showSuccessMsg();
+        }
+
+        function loadStaffExpectations() {
+            const expectations = getData('staff_expectations');
+            if (expectations) {
+                document.getElementById('exp-bintang').value = expectations.bintang || '';
+                document.getElementById('exp-sinta').value = expectations.sinta || '';
+                document.getElementById('exp-ale').value = expectations.ale || '';
+            }
+        }
+
+        function clearAllStaffExpectations() {
+            if (confirm('Hapus semua expectation for leader? Ini tidak bisa di-undo!')) {
+                saveData('staff_expectations', { bintang: '', sinta: '', ale: '' });
+                document.getElementById('exp-bintang').value = '';
+                document.getElementById('exp-sinta').value = '';
+                document.getElementById('exp-ale').value = '';
+                showSuccessMsg();
+            }
+        }
+
+        // ==================== INITIALIZE ====================
+        // Don't show login modal immediately - let checkAutoLogin handle it
+    </script>
+
+</body>
+</html>
