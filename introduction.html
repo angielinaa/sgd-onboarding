@@ -1190,7 +1190,7 @@
 
     <!-- Success Message -->
     <div class="success-msg" id="success-msg">
-        ✅ Data berhasil disimpan!
+        ��� Data berhasil disimpan!
     </div>
 
     <!-- Navbar -->
@@ -1495,6 +1495,39 @@
     </div>
 
     <script>
+        // ==================== SUPABASE CONFIGURATION ====================
+        const PROJECT_ID = 'hxwukeyhzcarwkrfzttk';
+        const PUBLIC_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4d3VrZXloemNhcndrcmZ6dHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTc2NjIsImV4cCI6MjA4NzE3MzY2Mn0.MjkrkuwQKxI-vNX8SUOhep5AuztgQuCR67vBSNNMy8Y';
+        const API_BASE_URL = `https://${PROJECT_ID}.supabase.co/functions/v1/make-server-acac1442`;
+
+        // Helper function for API calls
+        async function apiCall(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${PUBLIC_ANON_KEY}`,
+                ...options.headers
+            };
+
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.error(`API Error (${endpoint}):`, error);
+                    return null;
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error(`Network Error (${endpoint}):`, error);
+                return null;
+            }
+        }
+
         // ==================== AUTO LOGOUT AFTER 24 HOURS ====================
         const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
@@ -1644,15 +1677,9 @@
             return false;
         }
 
-        // ==================== DATA PERSISTENCE ====================
-        function saveData(key, value) {
-            localStorage.setItem('sgd_' + key, JSON.stringify(value));
-        }
-
-        function getData(key) {
-            const data = localStorage.getItem('sgd_' + key);
-            return data ? JSON.parse(data) : null;
-        }
+        // ==================== DATA PERSISTENCE (SUPABASE API) ====================
+        // NOTE: Login/session data still uses localStorage (per-user, this is OK)
+        // But collaborative data (checkins, expectations) now use Supabase API
 
         function showSuccessMsg() {
             const msg = document.getElementById('success-msg');
@@ -1662,25 +1689,31 @@
             }, 2000);
         }
 
-        function loadAllData() {
-            const question = getData('checkin_question') || 'Bagaimana perasaan kalian hari ini?';
-            const questionInput = document.getElementById('checkin-question-input');
-            if (questionInput) {
-                questionInput.placeholder = question;
+        async function loadAllData() {
+            // Load check-in question
+            const questionData = await apiCall('/checkin-question');
+            if (questionData) {
+                const question = questionData.question || 'Bagaimana perasaan kalian hari ini?';
+                const questionInput = document.getElementById('checkin-question-input');
+                if (questionInput) {
+                    questionInput.placeholder = question;
+                    questionInput.value = question;
+                }
+                document.getElementById('checkin-question-display').textContent = question;
             }
-            document.getElementById('checkin-question-display').textContent = question;
             
-            loadCheckins();
+            // Load all collaborative data
+            await loadCheckins();
             loadProfile('enzy');
             loadProfile('bintang');
             loadProfile('sinta');
             loadProfile('ale');
-            loadExpectations();
-            loadStaffExpectations();
+            await loadExpectations();
+            await loadStaffExpectations();
         }
 
         // ==================== CHECK-IN ====================
-        function saveCheckinQuestion() {
+        async function saveCheckinQuestion() {
             const questionInput = document.getElementById('checkin-question-input');
             const question = questionInput.value.trim();
             
@@ -1689,14 +1722,22 @@
                 return;
             }
             
-            saveData('checkin_question', question);
-            document.getElementById('checkin-question-display').textContent = question;
-            questionInput.value = '';
-            questionInput.placeholder = question;
-            showSuccessMsg();
+            const result = await apiCall('/checkin-question', {
+                method: 'POST',
+                body: JSON.stringify({ question })
+            });
+            
+            if (result && result.success) {
+                document.getElementById('checkin-question-display').textContent = question;
+                questionInput.value = '';
+                questionInput.placeholder = question;
+                showSuccessMsg();
+            } else {
+                alert('Gagal menyimpan pertanyaan. Coba lagi!');
+            }
         }
 
-        function saveCheckin() {
+        async function saveCheckin() {
             const checkinText = document.getElementById('checkin-text').value.trim();
             
             if (!checkinText) {
@@ -1704,17 +1745,22 @@
                 return;
             }
 
-            const checkins = getData('checkins') || [];
-            checkins.push({
-                user: userDisplayName,
-                text: checkinText,
-                timestamp: new Date().toISOString()
+            const result = await apiCall('/checkin-response', {
+                method: 'POST',
+                body: JSON.stringify({
+                    user: userDisplayName,
+                    text: checkinText,
+                    timestamp: new Date().toISOString()
+                })
             });
 
-            saveData('checkins', checkins);
-            document.getElementById('checkin-text').value = '';
-            loadCheckins();
-            showSuccessMsg();
+            if (result && result.success) {
+                document.getElementById('checkin-text').value = '';
+                await loadCheckins();
+                showSuccessMsg();
+            } else {
+                alert('Gagal menyimpan check-in. Coba lagi!');
+            }
         }
 
         // ==================== INITIALIZE ====================
@@ -1758,8 +1804,9 @@
             }
         });
 
-        function loadCheckins() {
-            const checkins = getData('checkins') || [];
+        async function loadCheckins() {
+            const data = await apiCall('/checkin-responses');
+            const checkins = (data && data.checkins) ? data.checkins : [];
             const list = document.getElementById('checkin-list');
             const container = document.getElementById('checkin-responses');
 
@@ -1783,7 +1830,7 @@
                 contentDiv.appendChild(strongTag);
                 
                 const spanTag = document.createElement('span');
-                spanTag.textContent = item.text;
+                spanTag.textContent = ' ' + item.text;
                 contentDiv.appendChild(spanTag);
                 
                 div.appendChild(contentDiv);
@@ -1800,28 +1847,34 @@
             });
         }
 
-        function deleteCheckin(index) {
+        async function deleteCheckin(index) {
             if (confirm('Hapus check-in ini?')) {
-                const checkins = getData('checkins') || [];
-                checkins.splice(index, 1);
-                saveData('checkins', checkins);
-                loadCheckins();
+                const result = await apiCall(`/checkin-response/${index}`, {
+                    method: 'DELETE'
+                });
+                
+                if (result && result.success) {
+                    await loadCheckins();
+                } else {
+                    alert('Gagal menghapus check-in. Coba lagi!');
+                }
             }
         }
 
-        // ==================== PROFILES ====================
+        // ==================== PROFILES (localStorage OK - per-user edits) ====================
         function saveProfile(profileId) {
             const profile = {
                 about: document.getElementById(profileId + '-about').value,
                 journey: document.getElementById(profileId + '-journey').value
             };
 
-            saveData('profile_' + profileId, profile);
+            localStorage.setItem('sgd_profile_' + profileId, JSON.stringify(profile));
             showSuccessMsg();
         }
 
         function loadProfile(profileId) {
-            const profile = getData('profile_' + profileId);
+            const profileData = localStorage.getItem('sgd_profile_' + profileId);
+            const profile = profileData ? JSON.parse(profileData) : null;
             if (profile) {
                 const aboutInput = document.getElementById(profileId + '-about');
                 if (aboutInput) aboutInput.value = profile.about || '';
@@ -1831,8 +1884,8 @@
             }
         }
 
-        // ==================== EXPECTATIONS ====================
-        function saveExpectation() {
+        // ==================== EXPECTATIONS (COLLABORATIVE - Supabase API) ====================
+        async function saveExpectation() {
             const expectationText = document.getElementById('expectation-text').value.trim();
             
             if (!expectationText) {
@@ -1840,21 +1893,27 @@
                 return;
             }
 
-            const expectations = getData('expectations') || [];
-            expectations.push({
-                user: userDisplayName,
-                text: expectationText,
-                timestamp: new Date().toISOString()
+            const result = await apiCall('/expectation-response', {
+                method: 'POST',
+                body: JSON.stringify({
+                    user: userDisplayName,
+                    text: expectationText,
+                    timestamp: new Date().toISOString()
+                })
             });
 
-            saveData('expectations', expectations);
-            document.getElementById('expectation-text').value = '';
-            loadExpectations();
-            showSuccessMsg();
+            if (result && result.success) {
+                document.getElementById('expectation-text').value = '';
+                await loadExpectations();
+                showSuccessMsg();
+            } else {
+                alert('Gagal menyimpan ekspektasi. Coba lagi!');
+            }
         }
 
-        function loadExpectations() {
-            const expectations = getData('expectations') || [];
+        async function loadExpectations() {
+            const data = await apiCall('/expectation-responses');
+            const expectations = (data && data.expectations) ? data.expectations : [];
             const list = document.getElementById('expectation-list');
             list.innerHTML = '';
 
@@ -1886,7 +1945,7 @@
                 contentDiv.appendChild(strongTag);
                 
                 const spanTag = document.createElement('span');
-                spanTag.textContent = exp.text;
+                spanTag.textContent = ' ' + exp.text;
                 contentDiv.appendChild(spanTag);
                 
                 item.appendChild(contentDiv);
@@ -1902,43 +1961,114 @@
             });
         }
 
-        function deleteExpectation(index) {
+        async function deleteExpectation(index) {
             if (confirm('Hapus expectation ini?')) {
-                const expectations = getData('expectations') || [];
-                expectations.splice(index, 1);
-                saveData('expectations', expectations);
-                loadExpectations();
+                const result = await apiCall(`/expectation-response/${index}`, {
+                    method: 'DELETE'
+                });
+                
+                if (result && result.success) {
+                    await loadExpectations();
+                } else {
+                    alert('Gagal menghapus ekspektasi. Coba lagi!');
+                }
             }
         }
 
-        // ==================== STAFF EXPECTATIONS ====================
-        function saveStaffExpectations() {
-            const expectations = {
-                bintang: document.getElementById('exp-bintang').value,
-                sinta: document.getElementById('exp-sinta').value,
-                ale: document.getElementById('exp-ale').value
+        // ==================== STAFF EXPECTATIONS FOR LEADER (COLLABORATIVE) ====================
+        async function saveStaffExpectations() {
+            // Get current textarea values
+            const bintangText = document.getElementById('exp-bintang').value.trim();
+            const sintaText = document.getElementById('exp-sinta').value.trim();
+            const aleText = document.getElementById('exp-ale').value.trim();
+
+            // Only save non-empty expectations
+            const savePromises = [];
+            
+            if (bintangText) {
+                savePromises.push(apiCall('/leader-expectation', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user: 'Bintang',
+                        text: bintangText,
+                        timestamp: new Date().toISOString()
+                    })
+                }));
+            }
+
+            if (sintaText) {
+                savePromises.push(apiCall('/leader-expectation', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user: 'Sinta',
+                        text: sintaText,
+                        timestamp: new Date().toISOString()
+                    })
+                }));
+            }
+
+            if (aleText) {
+                savePromises.push(apiCall('/leader-expectation', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user: 'Ale',
+                        text: aleText,
+                        timestamp: new Date().toISOString()
+                    })
+                }));
+            }
+
+            if (savePromises.length > 0) {
+                await Promise.all(savePromises);
+                showSuccessMsg();
+                await loadStaffExpectations();
+            } else {
+                alert('Tolong isi minimal satu ekspektasi!');
+            }
+        }
+
+        async function loadStaffExpectations() {
+            const data = await apiCall('/leader-expectations');
+            const leaderExpectations = (data && data.leaderExpectations) ? data.leaderExpectations : [];
+            
+            // Clear all textareas first
+            document.getElementById('exp-bintang').value = '';
+            document.getElementById('exp-sinta').value = '';
+            document.getElementById('exp-ale').value = '';
+            
+            // Group expectations by user
+            const grouped = {
+                'Bintang': [],
+                'Sinta': [],
+                'Ale': []
             };
 
-            saveData('staff_expectations', expectations);
-            showSuccessMsg();
-        }
+            leaderExpectations.forEach(exp => {
+                if (grouped[exp.user]) {
+                    grouped[exp.user].push(exp.text);
+                }
+            });
 
-        function loadStaffExpectations() {
-            const expectations = getData('staff_expectations');
-            if (expectations) {
-                document.getElementById('exp-bintang').value = expectations.bintang || '';
-                document.getElementById('exp-sinta').value = expectations.sinta || '';
-                document.getElementById('exp-ale').value = expectations.ale || '';
+            // Fill textareas with all expectations for each user
+            if (grouped['Bintang'].length > 0) {
+                document.getElementById('exp-bintang').value = grouped['Bintang'].join('\n\n');
+            }
+            if (grouped['Sinta'].length > 0) {
+                document.getElementById('exp-sinta').value = grouped['Sinta'].join('\n\n');
+            }
+            if (grouped['Ale'].length > 0) {
+                document.getElementById('exp-ale').value = grouped['Ale'].join('\n\n');
             }
         }
 
-        function clearAllStaffExpectations() {
+        async function clearAllStaffExpectations() {
             if (confirm('Hapus semua expectation for leader? Ini tidak bisa di-undo!')) {
-                saveData('staff_expectations', { bintang: '', sinta: '', ale: '' });
+                // Note: This only clears textareas. To delete from server, admin needs to delete individually
                 document.getElementById('exp-bintang').value = '';
                 document.getElementById('exp-sinta').value = '';
                 document.getElementById('exp-ale').value = '';
                 showSuccessMsg();
+                alert('Textareas cleared! Untuk hapus data di server, admin perlu delete satu-satu.');
             }
         }
 
